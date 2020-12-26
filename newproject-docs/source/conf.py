@@ -12,8 +12,9 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
 
+# Add Package to path:
+sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information -----------------------------------------------------
 
@@ -34,9 +35,10 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.autosectionlabel',
-    'nbsphinx',
     'sphinx.ext.mathjax',
+    'nbsphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
