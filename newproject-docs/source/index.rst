@@ -10,6 +10,10 @@ Welcome to Python New Project's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+See our Quick Start guide:
+
+ .. toctree::
+   Introduction <../notebooks/introduction.ipynb>
 
 
 Indices and tables
