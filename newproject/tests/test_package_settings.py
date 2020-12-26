@@ -10,7 +10,7 @@ class SettingsTests(unittest.TestCase):
         self.assertIsInstance(settings.settings, settings.SimpleNamespace)
 
     def test_RequiredSettings(self):
-        self.assertTrue({"package", "resources", "uuid4"}.issubset(settings.settings.__dict__))
+        self.assertTrue({"package", "user", "resources", "uuid4"}.issubset(settings.settings.__dict__))
 
 
 def main():
