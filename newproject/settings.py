@@ -32,8 +32,7 @@ settings.uuid4 = uuid.uuid4()
 
 
 def main():
-    import pprint
-    pprint.pprint(settings.__dict__, indent=2)
+    settings.logger.info(settings.__dict__)
     sys.exit(0)
 
 

@@ -1,5 +1,6 @@
 import warnings
+from packaging.version import Version
 
 warnings.simplefilter('always')
 
-__version__ = '0.1.0'
+__version__ = Version('0.1.0')
