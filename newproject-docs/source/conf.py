@@ -16,6 +16,10 @@ import sys
 # Add Package to path:
 sys.path.insert(0, os.path.abspath('../..'))
 
+# Then import the package (not pythonic but handy):
+# No concerned by Furo issue #65 (see https://github.com/pradyunsg/furo/issues/65)
+import newproject
+
 # -- Project information -----------------------------------------------------
 
 project = 'Python New Project'
@@ -23,7 +27,7 @@ copyright = '2020, Jean Landercy'
 author = 'Jean Landercy'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = str(newproject.__version__)
 
 
 # -- General configuration ---------------------------------------------------
@@ -39,6 +43,8 @@ extensions = [
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.mathjax',
     'nbsphinx',
+    # https://github.com/spatialaudio/nbsphinx/issues/24
+    'IPython.sphinxext.ipython_console_highlighting'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -54,7 +60,6 @@ exclude_patterns = ['_build', '**.ipynb_checkpoints']
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
 html_theme = 'furo'
 
 # Add any paths that contain custom static files (such as style sheets) here,
