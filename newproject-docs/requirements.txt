@@ -12,7 +12,7 @@ decorator==4.4.2
 defusedxml==0.6.0
 docutils==0.16
 entrypoints==0.3
-furo==2020.12.9b21
+furo==2020.12.09.b20
 idna==2.10
 imagesize==1.2.0
 importlib-metadata==3.3.0
