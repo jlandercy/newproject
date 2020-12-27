@@ -1,5 +1,5 @@
 """
-Package installer
+Package Installer
 """
 
 import pathlib

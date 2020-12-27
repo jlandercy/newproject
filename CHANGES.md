@@ -1,5 +1,11 @@
 # Changes
 
-## newproject v0.1.x
+## To-do list
 
-- [x] `v0.1.0`: **`2020-04-18`**: `added`: Initial release.
+ - [ ] Build GitLab CI/CD Pipeline
+ - [ ] Build GitHub CI/CD Pipeline
+
+## newproject v0.0.x
+
+ - [x] `0.0.2`: **`2020-12-27`**: `add`: Starting TDD, Sphinx documentation and pylint
+ - [x] `0.0.1`: **`2020-04-18`**: `add`: Initial release

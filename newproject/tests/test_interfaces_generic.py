@@ -5,7 +5,6 @@ Generic Interface Test Suite
 import sys
 import unittest
 from typing import Any
-import json
 
 from newproject.interfaces import GenericInterface
 
@@ -45,7 +44,7 @@ class TestGenericInterfaceImplementation:
 
 class SimpleCase(GenericInterface):
 
-    def __init__(self, value: Any = None):
+    def __init__(self, value: Any = None) -> None:
         self.value = value
 
     def to_dict(self) -> dict:
@@ -53,6 +52,7 @@ class SimpleCase(GenericInterface):
 
 
 class TestSimpleCase(TestGenericInterfaceImplementation, unittest.TestCase):
+
     factory = SimpleCase
     dict_configuration = {"value": "Hello World!"}
     json_configuration = """{"value": "Hello World!"}"""
