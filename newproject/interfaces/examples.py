@@ -1,8 +1,8 @@
 """
 Module :py:mod:`newproject.interfaces.examples` provides implemented interfaces examples.
-Classes defined in this module are used in test suites to check Generic Interface and
-implemented interface properties (see :py:mod:`newproject.tests.test_interfaces_generic`
-module for details).
+Classes defined in this module are used in test suites to check generic and
+implemented interfaces properties (see :py:mod:`newproject.tests.test_interfaces_generic`
+module for operational details).
 """
 
 import sys
@@ -14,7 +14,8 @@ from newproject.interfaces.generic import GenericInterface
 
 class SimpleCase(GenericInterface):
     """
-    This class shows a simple case of :class:`GenericInterface` implementation with no serializer.
+    This class shows a simple case of :class:`newproject.interfaces.generic.GenericInterface`
+    implementation with no serializer.
     """
 
     def __init__(self, value: Any = None) -> None:
@@ -32,9 +33,9 @@ class SimpleCase(GenericInterface):
 
 class SimpleCaseWithSerializer(SimpleCase):
     """
-    This class shows a simple case of :class:`GenericInterface` implementation with serializer.
-    It inherits from :class:`SimpleCase` and override the :meth:`serializer` method in order to
-    provide the missing helper for :class:`datetime.datetime` object.
+    This class shows a simple case inherited from :class:`SimpleCase` with serializer.
+    It overrides the :meth:`newproject.interfaces.generic.GenericInterface.serializer`
+    method in order to provide the missing helper for :class:`datetime.datetime` object.
     """
 
     @staticmethod
