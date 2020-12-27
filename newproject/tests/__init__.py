@@ -1,3 +1,3 @@
 """
-Unit Tests package
+Complete Package Tests Suites
 """

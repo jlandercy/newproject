@@ -1,5 +1,5 @@
 """
-Module for settings tests
+Package Settings Test Suite
 """
 
 import sys

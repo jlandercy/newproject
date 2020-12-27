@@ -7,6 +7,7 @@ all interfaces must implement.
 import sys
 import abc
 import json
+from typing import Any
 
 
 class GenericInterface(abc.ABC):
@@ -18,23 +19,23 @@ class GenericInterface(abc.ABC):
     @abc.abstractmethod
     def to_dict(self) -> dict:
         """
-        Returns the configuration of the object as a dictionary.
-        This configuration must be self-contained and sufficient to recreate a new object from it
+        Returns the object dict_configuration as a dictionary.
+        This dict_configuration must be self-contained and sufficient to recreate a new object from it
         using dict unpacking to feed the `__init__` method of the class.
-        This configuration must be JSON serializable as well, see method :meth:`to_json` and
-        override :meth:`serializer` to add JSON serialization helpers for specific objects.
+        This dict_configuration must be JSON serializable as well, see method :meth:`to_json`.
+        Override :meth:`serializer` method to add JSON serialization helpers if needed.
         """
 
     @staticmethod
-    def serializer(o) -> object:
+    def serializer(instance: Any) -> Any:
         """
-        JSON Serializer for any configuration object
+        JSON Serializer for any dict_configuration object
         """
-        return o
+        return instance
 
     def to_json(self) -> str:
         """
-        Returns the configuration of the object as a JSON string.
+        Returns the object dict_configuration as a JSON string.
         """
         return json.dumps(self.to_dict(), default=self.serializer)
 
