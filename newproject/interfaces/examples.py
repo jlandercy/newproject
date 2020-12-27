@@ -46,8 +46,7 @@ class SimpleCaseWithSerializer(SimpleCase):
         """
         if isinstance(instance, datetime.datetime):
             return instance.isoformat()
-        else:
-            return super().serializer(instance)
+        return super().serializer(instance)
 
 
 def main():
