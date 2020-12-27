@@ -1,5 +1,5 @@
-New Project's documentation!
-============================
+New Project's documentation
+===========================
 
 .. note::
 
@@ -20,6 +20,7 @@ Quick Start Guide
 Quick start guide is a collection of recipes presented as notebooks.
 
 .. toctree::
+   :maxdepth: 1
 
    Introduction <../notebooks/introduction.ipynb>
 
@@ -30,9 +31,9 @@ Package References
 The complete package references decompose as follow:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   Interfaces <../pages/interfaces.rst>
+   Interfaces <./pages/interfaces.rst>
 
 
 Indices and tables

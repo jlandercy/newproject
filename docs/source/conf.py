@@ -30,7 +30,7 @@ author = 'Jean Landercy'
 release = str(newproject.__version__)
 
 
-# -- General configuration ---------------------------------------------------
+# -- General to_dict ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom

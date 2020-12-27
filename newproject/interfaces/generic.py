@@ -1,21 +1,40 @@
 """
-Generic Interface module
+Module :py:mod:`newproject.interafces.generic` defines the class :class:`GenericInterface`
+on which any other interfaces must inherit from. This class exposes generic abstract methods
+all interfaces must implement.
 """
 
 import sys
 import abc
+import json
 
 
 class GenericInterface(abc.ABC):
     """
-    Generic Interface for all object of the package
+    Generic Interface (Abstract Base Class) for all object of the package.
+    This class must be subclassed by any other interfaces.
     """
 
     @abc.abstractmethod
-    def configuration(self) -> dict:
+    def to_dict(self) -> dict:
         """
-        Return the configuration of the object as a dictionary
+        Returns the configuration of the object as a dictionary.
+        This configuration must be sufficient to recreate a new object from it.
+        This configuration must be JSON serializable.
         """
+
+    @staticmethod
+    def serializer(o) -> object:
+        """
+        JSON Serializer for any configuration object
+        """
+        return o
+
+    def to_json(self) -> str:
+        """
+        Returns the configuration of the object as a JSON string.
+        """
+        return json.dumps(self.to_dict(), default=self.serializer)
 
 
 def main():
