@@ -26,7 +26,7 @@ class SimpleCase(GenericInterface):
 
     def to_dict(self) -> dict:
         """
-        Return the object configuration as a dictionary.
+        Returns the object configuration as a dictionary, including user defined value argument.
         """
         return {"value": self.value}
 
