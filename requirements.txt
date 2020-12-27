@@ -22,6 +22,7 @@ furo==2020.12.9b21
 idna==2.10
 imagesize==1.2.0
 importlib-metadata==2.1.1
+ipykernel==5.4.2
 ipython==7.19.0
 ipython-genutils==0.2.0
 isort==5.6.4
@@ -55,7 +56,6 @@ pyproj==2.6.1.post1
 pyrsistent==0.17.3
 python-dateutil==2.8.1
 pytz==2020.5
-pywin32==300
 pyzmq==20.0.0
 requests==2.25.1
 scikit-learn==0.23.1
@@ -76,10 +76,10 @@ tox==3.20.1
 traitlets==5.0.5
 typed-ast==1.4.1
 typing-extensions==3.7.4.3
+unittest-xml-reporting==3.0.4
 urllib3==1.26.2
 virtualenv==20.2.2
 wcwidth==0.2.5
 webencodings==0.5.1
-wincertstore==0.2
 wrapt==1.12.1
 zipp==3.4.0
