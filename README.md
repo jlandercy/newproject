@@ -47,6 +47,14 @@ python3 setup.py sdist bdist_wheel
 python3 -m pip install ./dist/*.whl
 ```
 
+### Test package
+
+To run the complete package test suite, issue:
+
+```bash
+python3 -m unittest -v newproject.tests
+```
+
 ### Build documentation
 
 This package use Sphinx to build documentation (see `docs/requirements.txt`).
