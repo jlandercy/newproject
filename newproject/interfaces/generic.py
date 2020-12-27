@@ -1,5 +1,5 @@
 """
-Module :py:mod:`newproject.interafces.generic` defines the class :class:`GenericInterface`
+Module :py:mod:`newproject.interfaces.generic` defines the class :class:`GenericInterface`
 on which any other interfaces must inherit from. This class exposes generic abstract methods
 all interfaces must implement.
 """
@@ -22,7 +22,7 @@ class GenericInterface(abc.ABC):
         """
         Returns the object configuration as a dictionary.
         This configuration must be self-contained and sufficient to recreate a new object from it
-        using dict unpacking to feed the `__init__` method of the class.
+        using dict unpacking to feed the :meth:`__init__` method of the class.
         This configuration must be JSON serializable as well, see method :meth:`to_json`.
         Override :meth:`serializer` method to add JSON serialization helpers if needed.
         """
