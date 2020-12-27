@@ -19,8 +19,10 @@ class GenericInterface(abc.ABC):
     def to_dict(self) -> dict:
         """
         Returns the configuration of the object as a dictionary.
-        This configuration must be sufficient to recreate a new object from it.
-        This configuration must be JSON serializable.
+        This configuration must be self-contained and sufficient to recreate a new object from it
+        using dict unpacking to feed the `__init__` method of the class.
+        This configuration must be JSON serializable as well, see method :meth:`to_json` and
+        override :meth:`serializer` to add JSON serialization helpers for specific objects.
         """
 
     @staticmethod
