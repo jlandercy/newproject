@@ -5,6 +5,7 @@ Generic Interface Test Suite
 import sys
 import unittest
 from typing import Any
+import datetime
 
 from newproject.interfaces import GenericInterface
 
@@ -56,6 +57,34 @@ class TestSimpleCase(TestGenericInterfaceImplementation, unittest.TestCase):
     factory = SimpleCase
     dict_configuration = {"value": "Hello World!"}
     json_configuration = """{"value": "Hello World!"}"""
+
+
+class TestSimpleCaseWithNoSerializer(TestGenericInterfaceImplementation, unittest.TestCase):
+
+    factory = SimpleCase
+    dict_configuration = {"value": datetime.datetime(2020, 1, 1)}
+    json_configuration = None
+
+    def test_to_json_configuration(self) -> None:
+        with self.assertRaises(AttributeError) as context:
+            self.assertEqual(self.json_configuration, self.instance.to_json())
+
+
+class SimpleCaseWithSerializer(SimpleCase):
+
+    @staticmethod
+    def serializer(instance: Any) -> Any:
+        if isinstance(instance, datetime.datetime):
+            return instance.isoformat()
+        else:
+            return super().serializer(instance)
+
+
+class TestSimpleCaseWithSerializer(TestGenericInterfaceImplementation, unittest.TestCase):
+
+    factory = SimpleCaseWithSerializer
+    dict_configuration = {"value": datetime.datetime(2020, 1, 1)}
+    json_configuration = """{"value": "2020-01-01T00:00:00"}"""
 
 
 def main():

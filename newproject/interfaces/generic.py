@@ -19,23 +19,26 @@ class GenericInterface(abc.ABC):
     @abc.abstractmethod
     def to_dict(self) -> dict:
         """
-        Returns the object dict_configuration as a dictionary.
-        This dict_configuration must be self-contained and sufficient to recreate a new object from it
+        Returns the object configuration as a dictionary.
+        This configuration must be self-contained and sufficient to recreate a new object from it
         using dict unpacking to feed the `__init__` method of the class.
-        This dict_configuration must be JSON serializable as well, see method :meth:`to_json`.
+        This configuration must be JSON serializable as well, see method :meth:`to_json`.
         Override :meth:`serializer` method to add JSON serialization helpers if needed.
         """
 
     @staticmethod
     def serializer(instance: Any) -> Any:
         """
-        JSON Serializer for any dict_configuration object
+        JSON Serializer provided as default to :meth:`to_json` method when serializing
+        object configuration.
+        This method must provide missing serialization helpers in order to allow
+        valid JSON export and object reconstruction.
         """
-        return instance
+        return instance.__dict__
 
     def to_json(self) -> str:
         """
-        Returns the object dict_configuration as a JSON string.
+        Returns the object configuration as a JSON string.
         """
         return json.dumps(self.to_dict(), default=self.serializer)
 

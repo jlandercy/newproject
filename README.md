@@ -1,6 +1,6 @@
 # Python New Project Package
 
-This repository holds a minimalistic new `python3` package with the following service
+This repository holds a minimalistic new `python3` package with the following services
 already included:
 
  - `setuptools` flow for packaging;
@@ -9,9 +9,9 @@ already included:
  - PyLint syntax checking;
  - GitHub or GitLab CI/CD flows.
 
-## How to...
+## How to?
 
-### ...Start new project?
+### Start a new project
 
 To start a new project from this package few steps are required:
 
@@ -23,7 +23,7 @@ To start a new project from this package few steps are required:
     `mv newproject myproject`;
  4. Start to implement your project as usual.
 
-### ...Install?
+### Install package
 
 Create a virtual environment if required and activate it:
 
@@ -38,7 +38,7 @@ This package follows the usual `setuptools` flow, installation is as simple as:
 python3 setup.py install
 ```
 
-This will install dependencies as well (as defined in `requirements.txt`)
+This will install dependencies as well (as defined in `requirements.txt`).
 
 To build a wheel and install from it, then issue:
 
@@ -47,7 +47,7 @@ python3 setup.py sdist bdist_wheel
 python3 -m pip install ./dist/*.whl
 ```
 
-### ...Build documentation?
+### Build documentation
 
 This package use Sphinx to build documentation (see `docs/requirements.txt`).
 To generate the package documentation, issue:
@@ -56,7 +56,7 @@ To generate the package documentation, issue:
 make --directory=./docs/ html
 ```
 
-### ...Refresh notebooks?
+### Refresh notebooks
 
 To refresh all notebooks, first declare a new kernel with all dependencies installed.
 This will point towards the above created virtual environment:
@@ -65,7 +65,7 @@ This will point towards the above created virtual environment:
 python3 -m ipykernel install --name=venv
 ```
 
-Then refresh all notebooks using the kernel:
+Then refresh all notebooks using the above defined kernel:
 
 ```bash
 python3 -m jupyter nbconvert --debug \
@@ -75,10 +75,12 @@ python3 -m jupyter nbconvert --debug \
         --execute ./docs/source/notebooks/*.ipynb
 ```
 
-### ...Check syntax?
+### Check syntax
 
 To check python syntax, issue:
 
 ```bash
 pylint newproject
 ```
+
+It will return the pylint score of the package and list all possible improvements.
