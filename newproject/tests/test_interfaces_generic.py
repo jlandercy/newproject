@@ -1,10 +1,13 @@
 """
-Generic Interface Test Suite
+Module :mod:`newproject.tests.test_interfaces_generic` implements test suite for the
+:class:`newproject.interfaces.generic.GenericInterface` using examples defined in
+module :mod:`newproject.tests.test_interfaces_generic`.
 """
 
 import sys
 import unittest
 import datetime
+import json
 
 from newproject.interfaces import GenericInterface
 from newproject.interfaces.examples import SimpleCase, SimpleCaseWithSerializer
@@ -20,19 +23,40 @@ class TestGenericInterface(unittest.TestCase):
 
 
 class TestGenericInterfaceImplementation:
+    """
+    Reusable class for Generic Interface implementation tests.
+    Test class must inherit both from this class and :class:`unittest.TestCase`.
+    Use class members `factory` and `configuration` to bind tested class.
+    """
 
-    factory = object
-    dict_configuration = dict()
-    json_configuration = ""
+    factory = None
+    dict_configuration = None
+    json_configuration = None
 
     def setUp(self) -> None:
+        """
+        Create instance of class with configuration using factory
+        """
         self.instance = self.factory(**self.dict_configuration)
 
     def test_to_dict_configuration(self) -> None:
+        """
+        Test whether configuration returned as a dict is equal to original configuration
+        """
         self.assertEqual(self.dict_configuration, self.instance.to_dict())
 
     def test_to_json_configuration(self) -> None:
+        """
+        Test whether configuration returned as a dict is equal to expected JSON configuration
+        """
         self.assertEqual(self.json_configuration, self.instance.to_json())
+
+    def test_creation_from_dict_configuration(self) -> None:
+        """
+        Test whether new instance created with object configuration return same configuration object
+        """
+        instance = self.factory(**self.instance.to_dict())
+        self.assertEqual(self.instance.to_dict(), instance.to_dict())
 
 
 class TestSimpleCase(TestGenericInterfaceImplementation, unittest.TestCase):

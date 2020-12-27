@@ -3,14 +3,13 @@ Interfaces
 
 .. automodule:: newproject.interfaces
 
-Generic Interfaces
-------------------
+Generic Interface
+-----------------
 
 .. automodule:: newproject.interfaces.generic
 
-
 .. autoclass:: newproject.interfaces.generic.GenericInterface
-    :members:
+   :members:
 
 Implementation examples
 -----------------------
@@ -20,9 +19,14 @@ Implementation examples
 Simple Cases
 ************
 
+.. automodule:: newproject.tests.test_interfaces_generic
+
 .. autoclass:: newproject.interfaces.examples.SimpleCase
-    :members:
+   :members:
 
 .. autoclass:: newproject.interfaces.examples.SimpleCaseWithSerializer
-    :members:
+   :members:
+
+.. autoclass:: newproject.tests.test_interfaces_generic.TestGenericInterfaceImplementation
+   :members:
 

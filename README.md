@@ -1,12 +1,13 @@
 # Python New Project Package
 
-This repository holds a minimalistic new `python3` package with the following services
+This repository holds a minimal `python3` package with the following services
 already included:
 
  - `setuptools` flow for packaging;
  - Test Suite sub-package for Test Driven Development;
+ - Code Coverage for Test Suite;
+ - PyLint syntax checking; 
  - Sphinx documentation builder (including notebooks rendering);
- - PyLint syntax checking;
  - GitHub or GitLab CI/CD flows.
 
 ## How to?
@@ -15,12 +16,10 @@ already included:
 
 To start a new project from this package few steps are required:
 
- 1. Fork the [repository](https://github.com/jlandercy/newproject) to your hub
-    account and rename it at will;
- 2. Clone the forked repository to your workspace:
-    `git clone https://github.com/<user>/<repo>`;
- 3. Rename the project by renaming the package directory:
-    `mv newproject myproject`;
+ 1. Fork this [repository](https://github.com/jlandercy/newproject) to your hub
+    account and rename it;
+ 2. Clone the forked repository to your workspace;
+ 3. Rename the project by renaming the package directory;
  4. Start to implement your project as usual.
 
 ### Install package
@@ -52,12 +51,21 @@ python3 -m pip install ./dist/*.whl
 To run the complete package test suite, issue:
 
 ```bash
-python3 -m unittest -v newproject.tests
+python -m unittest discover -v newproject.tests
+```
+
+### Test coverage
+
+To run the test suite coverage, issue:
+
+```bash
+python3 -m coverage run -m unittest discover -v newproject.tests
+python3 -m coverage report
 ```
 
 ### Build documentation
 
-This package use Sphinx to build documentation (see `docs/requirements.txt`).
+This package uses Sphinx to build documentation (see `docs/requirements.txt`).
 To generate the package documentation, issue:
 
 ```bash

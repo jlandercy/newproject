@@ -13,6 +13,7 @@ chardet==4.0.0
 colorama==0.4.4
 colorlog==4.6.2
 commonmark==0.9.1
+coverage==5.3.1
 decorator==4.4.2
 defusedxml==0.6.0
 distlib==0.3.1
