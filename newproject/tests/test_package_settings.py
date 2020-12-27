@@ -1,19 +1,36 @@
+"""
+Module for settings tests
+"""
+
 import sys
 import unittest
 
 from newproject import settings
 
 
-class SettingsTests(unittest.TestCase):
+class TestSettings(unittest.TestCase):
+    """
+    Package settings tests
+    """
 
-    def test_NameSpace(self):
+    def test_namespace(self):
+        """
+        Test namespace type
+        """
         self.assertIsInstance(settings.settings, settings.SimpleNamespace)
 
-    def test_RequiredSettings(self):
-        self.assertTrue({"package", "user", "resources", "uuid4"}.issubset(settings.settings.__dict__))
+    def test_required_keys(self):
+        """
+        Test namespace keys
+        """
+        self.assertTrue({"package", "user", "resources", "uuid4"}
+                        .issubset(settings.settings.__dict__))
 
 
 def main():
+    """
+    Module entrypoint
+    """
     unittest.main()
     sys.exit(0)
 

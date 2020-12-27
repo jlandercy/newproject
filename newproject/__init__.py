@@ -1,3 +1,7 @@
+"""
+New Project package
+"""
+
 import warnings
 from packaging.version import Version
 

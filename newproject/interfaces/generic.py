@@ -1,8 +1,9 @@
+"""
+Generic Interface module
+"""
+
 import sys
 import abc
-
-import newproject
-from newproject.settings import settings
 
 
 class GenericInterface(abc.ABC):
@@ -15,10 +16,12 @@ class GenericInterface(abc.ABC):
         """
         Return the configuration of the object as a dictionary
         """
-        pass
 
 
 def main():
+    """
+    Module entrypoint
+    """
     sys.exit(0)
 
 

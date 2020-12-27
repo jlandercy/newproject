@@ -1,3 +1,7 @@
+"""
+Settings module
+"""
+
 import os
 import sys
 import uuid
@@ -32,6 +36,9 @@ settings.uuid4 = uuid.uuid4()
 
 
 def main():
+    """
+    Module entrypoint
+    """
     settings.logger.info(settings.__dict__)
     sys.exit(0)
 
