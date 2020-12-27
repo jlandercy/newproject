@@ -33,6 +33,8 @@ The complete package references decompose as follow:
    :maxdepth: 2
 
    Interfaces <../pages/interfaces.rst>
+   Read-me <../README.md>
+   Changes <../CHANGES.md>
 
 
 Indices and tables
