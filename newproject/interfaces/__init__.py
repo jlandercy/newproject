@@ -4,7 +4,7 @@ object creation and manipulation.
 Interfaces are used to enforce consistency among objects by specifying
 a clear and strict API. Interfaces are:
 
-  * Either Abstract Base Classes, then they are prefixed by the **Generic** keyword
+  * Either Abstract Base Classes, then they are prefixed by the :attr:`Generic` keyword
     to recall they are abstract.
   * Or concrete classes when all abstract methods have been implemented.
 

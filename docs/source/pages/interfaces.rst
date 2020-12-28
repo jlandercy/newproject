@@ -19,14 +19,25 @@ Implementation examples
 Simple Cases
 ************
 
-.. automodule:: newproject.tests.test_interfaces_generic
+In this use case, two basic interfaces are defined. The class :class:`SimpleCase`
+which accepts a single value as configuration but without any serializer defined:
 
 .. autoclass:: newproject.interfaces.examples.SimpleCase
    :members:
 
+And the class :class:`SimpleCaseWithSerializer` which inherits from :class:`SimpleCase`
+and do provide a serializer:
+
 .. autoclass:: newproject.interfaces.examples.SimpleCaseWithSerializer
    :members:
 
-.. autoclass:: newproject.tests.test_interfaces_generic.TestGenericInterfaceImplementation
+Those classes are then used to derive unit test cases in order to check and validate
+expected behaviours.
+
+.. automodule:: newproject.tests.test_interfaces
+
+.. automodule:: newproject.tests.test_interfaces_examples
+
+.. autoclass:: newproject.tests.test_interfaces.TestGenericInterfaceImplementation
    :members:
 
