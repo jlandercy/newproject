@@ -1,8 +1,8 @@
 """
 Module :py:mod:`newproject.interfaces.examples` provides implemented interfaces examples.
 Classes defined in this module are used in test suites to check generic and
-implemented interfaces properties (see :py:mod:`newproject.tests.test_interfaces_generic`
-module for operational details).
+implemented interfaces properties (see :py:mod:`newproject.tests.test_interfaces`
+and :py:mod:`newproject.tests.test_interfaces_examples` modules for operational details).
 """
 
 from typing import Any
