@@ -34,6 +34,7 @@ The complete package references decompose as follow:
    :maxdepth: 1
 
    Interfaces <./pages/interfaces.rst>
+   Exceptions <./pages/errors.rst>
 
 
 Indices and tables
