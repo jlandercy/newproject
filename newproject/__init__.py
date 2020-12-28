@@ -7,4 +7,4 @@ from packaging.version import Version
 
 warnings.simplefilter('always')
 
-__version__ = Version('0.1.0')
+__version__ = Version('0.0.2')
