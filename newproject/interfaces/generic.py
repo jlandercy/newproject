@@ -4,7 +4,6 @@ on which any other interfaces must inherit from. This class exposes generic abst
 all interfaces must implement.
 """
 
-import sys
 import abc
 import json
 from typing import Any
@@ -34,6 +33,8 @@ class GenericInterface(abc.ABC):
         This method must provide missing serialization helpers in order to allow
         valid JSON export and object reconstruction.
         """
+        if isinstance(instance, (str, int, float)) or instance is None:
+            return instance
         return instance.__dict__
 
     def to_json(self) -> str:
@@ -41,14 +42,3 @@ class GenericInterface(abc.ABC):
         Returns the object configuration as a JSON string.
         """
         return json.dumps(self.to_dict(), default=self.serializer)
-
-
-def main():
-    """
-    Module entrypoint
-    """
-    sys.exit(0)
-
-
-if __name__ == "__main__":
-    main()

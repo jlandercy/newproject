@@ -12,7 +12,7 @@ def main():
     """
     Module entrypoint
     """
-    settings.logger.info("New _package {}".format(newproject.__version__))
+    settings.logger.info("New package {}".format(newproject.__version__))
     sys.exit(0)
 
 

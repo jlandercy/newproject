@@ -5,7 +5,6 @@ implemented interfaces properties (see :py:mod:`newproject.tests.test_interfaces
 module for operational details).
 """
 
-import sys
 from typing import Any
 import datetime
 
@@ -47,14 +46,3 @@ class SimpleCaseWithSerializer(SimpleCase):
         if isinstance(instance, datetime.datetime):
             return instance.isoformat()
         return super().serializer(instance)
-
-
-def main():
-    """
-    Module entrypoint
-    """
-    sys.exit(0)
-
-
-if __name__ == "__main__":
-    main()

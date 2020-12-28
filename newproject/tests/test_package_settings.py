@@ -2,7 +2,6 @@
 Package Settings Test Suite
 """
 
-import sys
 import unittest
 
 from newproject import settings
@@ -26,14 +25,3 @@ class TestSettings(unittest.TestCase):
         self.assertTrue({"package", "user", "resources", "uuid4"}
                         .issubset(settings.settings.__dict__))
 
-
-def main():
-    """
-    Module entrypoint
-    """
-    unittest.main()
-    sys.exit(0)
-
-
-if __name__ == "__main__":
-    main()
