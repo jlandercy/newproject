@@ -54,6 +54,12 @@ To run the complete package test suite, issue:
 python -m unittest discover -v newproject.tests
 ```
 
+To generate XML report, issue instead:
+
+```bash
+python3 -m xmlrunner discover newproject.tests
+```
+
 ### Test coverage
 
 To run the test suite coverage, issue:
@@ -106,7 +112,7 @@ It will return the pylint score of the package and list all possible improvement
 To generate badges, issue the following commands:
 
 ```bash
-anybadge --label=pylint --value=2.22 --file=docs/sources/badges/pylint.svg 2=red 4=orange 8=yellow 10=green
-anybadge --label=coverage --value=65 --file=docs/sources/badges/coverage.svg
-anybadge --label=pipeline --value=passing --file=docs/sources/badges/pipeline.svg passing=green failing=red
+anybadge --value=2.22 --file=pylint.svg pylint
+anybadge --value=65 --file=coverage.svg coverage
+anybadge --label=pipeline --value=passing --file=pipeline.svg passing=green failing=red
 ```
