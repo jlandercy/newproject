@@ -78,6 +78,14 @@ To generate the package documentation, issue:
 make --directory=./docs/ html
 ```
 
+Or:
+
+```bash
+sphinx-build -b html source build/html
+```
+
+
+
 ### Refresh notebooks
 
 To refresh all notebooks, first declare a new kernel with all dependencies installed.
@@ -106,6 +114,14 @@ pylint newproject
 ```
 
 It will return the pylint score of the package and list all possible improvements.
+
+### Check types
+
+To check type hints and common errors, issue:
+
+```bash
+mypy -v newproject
+```
 
 ### Generate badges
 
