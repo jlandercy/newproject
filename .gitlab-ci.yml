@@ -1,0 +1,143 @@
+image: gitlab.sc.ulb.ac.be/smartcampus/dependency_proxy/containers/jlandercy/python-challenge:1.0
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  key: "Cache_${CI_PROJECT_ID}"
+  paths:
+    - .cache/pip
+
+default:
+  before_script:
+    - python3 -m virtualenv --system-site-packages venv
+    - source venv/bin/activate
+    - python3 -m pip install --user -r requirements.txt
+
+stages:
+  - build
+  - tests
+  - docs
+
+build-wheel:
+  stage: build
+  tags:
+    - build
+  script:
+    - python3 setup.py sdist bdist_wheel
+    - python3 -m pip install ./dist/*.whl
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist
+
+test-suite:
+  stage: tests
+  tags:
+    - tests
+  script:
+    - python3 -W always -m unittest discover -v $CI_PROJECT_NAME.tests 2>&1 | tee unittest.txt
+    - python3 -m xmlrunner discover $CI_PROJECT_NAME.tests
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - unittest.txt
+    reports:
+      junit:
+        - ./TEST-*.xml
+
+test-notebooks:
+  stage: tests
+  tags:
+    - tests
+  script:
+    - python3 -m pip install ./dist/*.whl
+    - python3 -m ipykernel install --name=venv
+    - python3 -m jupyter nbconvert --debug
+      --ExecutePreprocessor.timeout=600
+      --ExecutePreprocessor.kernel_name=venv
+      --inplace --clear-output --to notebook
+      --execute ./docs/source/notebooks/*.ipynb
+  needs:
+    - build-wheel
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - docs/source/notebooks
+
+test-pylint:
+  stage: tests
+  tags:
+    - tests
+  script:
+    - pylint --fail-under 6 --rcfile=.pylintrc --output-format=text challenge | tee pylint.txt
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - pylint.txt
+
+test-coverage:
+  stage: tests
+  tags:
+    - tests
+  script:
+    - python3 -m coverage run -m unittest discover -v $CI_PROJECT_NAME.tests
+    - python3 -m coverage report --omit=venv/**/* | tee coverage.txt
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - coverage.txt
+
+test-mypy:
+  stage: tests
+  tags:
+    - tests
+  script:
+    - python3 -m mypy -v $CI_PROJECT_NAME | tee mypy.txt
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - mypy.txt
+
+build-badges:
+  stage: docs
+  tags:
+    - badges
+  needs:
+    - test-suite
+    - test-notebooks
+    - test-pylint
+    - test-coverage
+  script:
+    - anybadge --label commit-sha --value="$CI_COMMIT_SHORT_SHA" --file=commit-sha.svg --color green
+    - commits=$(git rev-list --all --count)
+    - anybadge --label commits --value="$commits" --file=commits.svg --color green
+    - pylintscore=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
+    - anybadge --value=$pylintscore --file=pylint.svg pylint
+    - covscore=$(sed -n 's/^TOTAL.* \([0-9]*\)%.*/\1/p' coverage.txt)
+    - anybadge --value=$covscore --file=coverage.svg coverage
+    - unittest=$(sed -n 's/^Ran \([0-9]*\) test.*/\1/p' unittest.txt)
+    - anybadge --label unittest --value=$unittest --file=unittest.svg
+    - notebooks=$(ls -l docs/source/notebooks/*.ipynb | wc -l)
+    - anybadge --label notebooks --value=$notebooks --file=notebooks.svg
+  artifacts:
+    expire_in: 1 week
+    paths:
+        - "*.svg"
+
+build-docs:
+  stage: docs
+  tags:
+    - docs
+  allow_failure: false
+  script:
+    - make --directory=./docs/ html
+    #- sphinx-build -b html source build/html
+  needs:
+    - test-notebooks
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - docs/build/html
+  only:
+    - master
