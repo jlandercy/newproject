@@ -1,7 +1,6 @@
 import re
 import os
 import pathlib
-import subprocess
 
 import nox
 from lxml import etree
@@ -14,19 +13,23 @@ if os.name == 'nt':
 
 
 package = pathlib.Path(__file__).parent.parts[-1]
-sink = pathlib.Path(nox.options.envdir) / 'reports'
-sink.mkdir(exist_ok=True)
+reports = pathlib.Path(nox.options.envdir) / 'reports'
+reports.mkdir(exist_ok=True)
 
 
 @nox.session
-def pylint(session):
+def linter(session):
     """Linter Score"""
-    report = sink / "pylint.log"
+    report = reports / "pylint.log"
     with report.open("w") as output:
-        session.run("pylint", package, "--output-format=parseable", "--fail-under=6", stdout=output)
+        session.run(
+            "pylint", package,
+            "--output-format=parseable", "--rcfile=.pylintrc",
+            "--fail-under=6", stdout=output
+        )
     pattern = re.compile(r"Your code has been rated at (?P<score>[-.\d]*)/10")
     score = float(pattern.findall(report.read_text())[0])
-    badge = sink / 'pylint.svg'
+    badge = reports / 'pylint.svg'
     if badge.exists():
         badge.unlink()
     session.run("anybadge", f"--value={score:}/10", f"--file={badge:}", "pylint")
@@ -35,15 +38,15 @@ def pylint(session):
 @nox.session
 def coverage(session):
     """Coverage Score"""
-    env = {"COVERAGE_FILE": str(sink / ".coverage")}
-    report = sink / "coverage.xml"
+    env = {"COVERAGE_FILE": str(reports / ".coverage")}
+    report = reports / "coverage.xml"
     session.run("coverage", "run", "-m", "unittest", "discover", "-v", f"{package:}.tests", env=env)
     session.run("coverage", "report", "--omit=venv/**/*", env=env)
     session.run("coverage", "xml", "-o", f"{report:}", env=env)
     with report.open() as handler:
         root = etree.XML(handler.read())
     score = float(root.get("line-rate"))*100.
-    badge = sink / 'coverage.svg'
+    badge = reports / 'coverage.svg'
     if badge.exists():
         badge.unlink()
     session.run("anybadge", f"--value={score:}%", f"--file={badge:}", "coverage")
