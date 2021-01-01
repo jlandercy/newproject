@@ -70,7 +70,7 @@ test-pylint:
   tags:
     - tests
   script:
-    - pylint --fail-under 6 --rcfile=.pylintrc --output-format=text challenge | tee pylint.txt
+    - pylint --fail-under 6 --rcfile=.pylintrc --output-format=text $CI_PROJECT_NAME | tee pylint.txt
   artifacts:
     expire_in: 1 week
     paths:
