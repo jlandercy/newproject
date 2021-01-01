@@ -18,14 +18,29 @@ reports.mkdir(exist_ok=True)
 
 
 @nox.session
+def tests(session):
+    """Test Suite"""
+    session.run("python", "-m", "xmlrunner", "-o", str(reports), "discover", "-v", f"{package:}.tests")
+    report = reports / "tests.log"
+    with report.open("w") as handler:
+        session.run("python", "-m", "unittest", "discover", "-v", f"{package:}.tests", stdout=handler)
+    pattern = re.compile(r"Ran (?P<count>[\d]+) tests in (?P<elapsed>[.\d]+)s")
+    count, elapsed = pattern.findall(report.read_text())[0]
+    badge = reports / 'unittest.svg'
+    if badge.exists():
+        badge.unlink()
+    session.run("anybadge", f"--value={count:}/{elapsed:}s", f"--file={badge:}", "--label=unittest")
+
+
+@nox.session
 def linter(session):
     """Linter Score"""
     report = reports / "pylint.log"
-    with report.open("w") as output:
+    with report.open("w") as handler:
         session.run(
             "pylint", package,
             "--output-format=parseable", "--rcfile=.pylintrc",
-            "--fail-under=6", stdout=output
+            "--fail-under=6", stdout=handler
         )
     pattern = re.compile(r"Your code has been rated at (?P<score>[-.\d]*)/10")
     score = float(pattern.findall(report.read_text())[0])
@@ -50,3 +65,4 @@ def coverage(session):
     if badge.exists():
         badge.unlink()
     session.run("anybadge", f"--value={score:}%", f"--file={badge:}", "coverage")
+
