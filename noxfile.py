@@ -21,19 +21,15 @@ sink.mkdir(exist_ok=True)
 @nox.session
 def pylint(session):
     """Linter Score"""
-    process = subprocess.run(
-        ["pylint", package, "--output-format=parseable"],
-        capture_output=True,
-        encoding='utf-8'
-    )
-    session.log(" ".join(process.args))
-    session.log(process.stdout)
+    report = sink / "pylint.log"
+    with report.open("w") as output:
+        session.run("pylint", package, "--output-format=parseable", "--fail-under=6", stdout=output)
     pattern = re.compile(r"Your code has been rated at (?P<score>[-.\d]*)/10")
-    score = float(pattern.findall(process.stdout)[0])
+    score = float(pattern.findall(report.read_text())[0])
     badge = sink / 'pylint.svg'
     if badge.exists():
         badge.unlink()
-    session.run("anybadge", f"--value={score:}", f"--file={badge:}", "pylint")
+    session.run("anybadge", f"--value={score:}/10", f"--file={badge:}", "pylint")
 
 
 @nox.session
@@ -46,8 +42,8 @@ def coverage(session):
     session.run("coverage", "xml", "-o", f"{report:}", env=env)
     with report.open() as handler:
         root = etree.XML(handler.read())
-        score = float(root.get("line-rate"))*100.
+    score = float(root.get("line-rate"))*100.
     badge = sink / 'coverage.svg'
     if badge.exists():
         badge.unlink()
-    session.run("anybadge", f"--value={score:}", f"--file={badge:}", "coverage")
+    session.run("anybadge", f"--value={score:}%", f"--file={badge:}", "coverage")
