@@ -53,8 +53,7 @@ This will install dependencies as well (as defined in `requirements.txt`).
 To build a wheel and install from it, then issue:
 
 ```bash
-python3 setup.py sdist bdist_wheel
-python3 -m pip install ./dist/*.whl
+nox --session package install
 ```
 
 ### Test package

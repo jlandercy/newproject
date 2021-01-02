@@ -24,8 +24,7 @@ package:
   tags:
     - build
   script:
-    - nox --session package
-    - python -m pip install ./dist/*.whl
+    - nox --session package install
   artifacts:
     expire_in: 1 week
     paths:
@@ -35,8 +34,6 @@ quality:
   stage: tests
   tags:
     - tests
-  needs:
-    - package_name
   script:
     - nox --session tests linter coverage types styles
   artifacts:
@@ -52,9 +49,10 @@ notebooks:
   tags:
     - tests
   needs:
-    - package_name
+    - package
   allow_failure: true
   script:
+    - nox --session packahe install
     - nox --session notebooks
   artifacts:
     expire_in: 1 week

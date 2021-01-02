@@ -42,6 +42,26 @@ def package(session):
 
 
 @nox.session
+def install(session):
+    """Package Installer"""
+    #package(session)
+    wheels = [str(file) for file in pathlib.Path("./dist").glob("*.whl")]
+    if not wheels:
+        session.error("No wheel found, first package then install")
+    report = reports_path / "install.log"
+    with report.open("w") as handler:
+        session.run("python", "-m", "pip", "install", *wheels, stdout=handler)
+
+
+@nox.session
+def uninstall(session):
+    """Package Uninstaller"""
+    report = reports_path / "uninstall.log"
+    with report.open("w") as handler:
+        session.run("python", "-m", "pip", "uninstall", "-y", package_name, stdout=handler)
+
+
+@nox.session
 def tests(session):
     """Package Test Suite Report"""
     report = reports_path / "tests.log"
