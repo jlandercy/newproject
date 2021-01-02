@@ -58,7 +58,7 @@ def linter(session):
 @nox.session
 def coverage(session):
     """Package Test Suite Coverage Score"""
-    env = {"COVERAGE_FILE": str(reports / ".coverage")}
+    env = {"COVERAGE_FILE": str(reports / "coverage.dat")}
     report = reports / "coverage.xml"
     session.run("python", "-m", "coverage", "run", "-m", "unittest",
                 "discover", "-v", f"{package:}.tests", env=env)
@@ -91,6 +91,29 @@ def typehints(session):
     if badge.exists():
         badge.unlink()
     session.run("anybadge", f"--value={status:}", f"--file={badge:}", "--label=type-hints")
+
+
+@nox.session
+def notebooks(session):
+    """Package Notebooks"""
+    report = reports / "notebooks.log"
+    with report.open("w") as handler:
+        #session.run("python", "-m", "ipykernel", "install", f"--name={package:}")
+        session.run(
+            "python", "-m",
+            "jupyter", "nbconvert", "--debug",
+            "--ExecutePreprocessor.timeout=600",
+            #f"--ExecutePreprocessor.kernel_name={package:}"
+            "--inplace", "--clear-output", "--to", "notebook",
+            "--execute", "./docs/source/notebooks/*.ipynb",
+            stdout=handler
+        )
+    # pattern = re.compile(r"build (?P<status>[\w]+).")
+    # status = pattern.findall(report.read_text())[0]
+    # badge = reports / 'docs.svg'
+    # if badge.exists():
+    #     badge.unlink()
+    # session.run("anybadge", f"--value={status:}", f"--file={badge:}", "--label=docs")
 
 
 @nox.session
