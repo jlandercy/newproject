@@ -47,12 +47,28 @@ quality:
       junit:
         - .cache/reports/unittest.xml
 
+notebooks:
+  stage: tests
+  tags:
+    - tests
+  needs:
+    - package
+  allow_failure: true
+  script:
+    - nox --session notebooks
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - .docs/source/notebooks/*
+      - .cache/reports/notebooks.log
+
 documentation:
   stage: docs
   tags:
     - docs
   needs:
     - quality
+    - notebooks
   script:
     - nox --session docs
   artifacts:
