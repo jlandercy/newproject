@@ -6,20 +6,25 @@ import nox
 from lxml import etree
 
 
-nox.options.envdir = ".cache"
+# Settings:
 
+nox.options.envdir = ".cache"
 if os.name == 'nt':
     nox.options.default_venv_backend = "none"
 
+cache = pathlib.Path(nox.options.envdir)
+cache.mkdir(exist_ok=True)
 
 package = pathlib.Path(__file__).parent.parts[-1]
 reports = pathlib.Path(nox.options.envdir) / 'reports'
 reports.mkdir(exist_ok=True)
 
 
+# Sessions:
+
 @nox.session
 def tests(session):
-    """Test Suite Report"""
+    """Package Test Suite Report"""
     report = reports / "unittest.log"
     with report.open("w") as handler:
         session.run("python", "-m", "xmlrunner", "--output-file", str(reports / "unittest.xml"),
@@ -47,12 +52,12 @@ def linter(session):
     badge = reports / 'linter.svg'
     if badge.exists():
         badge.unlink()
-    session.run("anybadge", f"--value={score:}/10", f"--file={badge:}", "pylint")
+    session.run("anybadge", f"--value={score:}/10", f"--file={badge:}", "--label=linter", "pylint")
 
 
 @nox.session
 def coverage(session):
-    """Test Suite Coverage Score"""
+    """Package Test Suite Coverage Score"""
     env = {"COVERAGE_FILE": str(reports / ".coverage")}
     report = reports / "coverage.xml"
     session.run("python", "-m", "coverage", "run", "-m", "unittest",
@@ -70,9 +75,9 @@ def coverage(session):
 
 @nox.session
 def typehints(session):
-    """Type Hints Report"""
+    """Package Type Hints Report"""
     report = reports / "typehints.log"
-    # Result of my is cached and differential
+    # Result of mypy is cached and differential:
     with report.open("w") as handler:
         session.run("python", "-m", "mypy",
                     "--cache-dir", str(reports.parent / ".mypy"),
@@ -86,3 +91,18 @@ def typehints(session):
     if badge.exists():
         badge.unlink()
     session.run("anybadge", f"--value={status:}", f"--file={badge:}", "--label=type-hints")
+
+
+@nox.session
+def docs(session):
+    """Package Documentation"""
+    report = reports / "docs.log"
+    with report.open("w") as handler:
+        session.run("sphinx-build", "-b", "html", f"docs/source", str(cache / "docs"),
+                    stdout=handler)
+    pattern = re.compile(r"build (?P<status>[\w]+).")
+    status = pattern.findall(report.read_text())[0]
+    badge = reports / 'docs.svg'
+    if badge.exists():
+        badge.unlink()
+    session.run("anybadge", f"--value={status:}", f"--file={badge:}", "--label=docs")
