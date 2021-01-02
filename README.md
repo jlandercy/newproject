@@ -15,6 +15,12 @@ with the following quality services already included:
  - `nox` for session coordination;
  - GitHub or GitLab CI/CD flows.
 
+To check out available `nox` sessions, issue:
+
+```bash
+nox --list
+```
+
 ## How to?
 
 ### Start a new project
@@ -100,7 +106,7 @@ It will return the pylint score of the package and list all possible improvement
 To check type hints and common errors, issue:
 
 ```bash
-nox -s typehints
+nox -s types
 ```
 
 ### Generate badges

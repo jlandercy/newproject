@@ -24,15 +24,15 @@ reports.mkdir(exist_ok=True)
 @nox.session
 def tests(session):
     """Package Test Suite Report"""
-    report = reports / "unittest.log"
+    report = reports / "tests.log"
     with report.open("w") as handler:
-        session.run("python", "-m", "xmlrunner", "--output-file", str(reports / "unittest.xml"),
+        session.run("python", "-m", "xmlrunner", "--output-file", str(reports / "tests.xml"),
                     "discover", "-v", f"{package:}.tests", stdout=handler)
     pattern = re.compile(r"Ran (?P<count>[\d]+) tests in (?P<elapsed>[.\d]+)s")
     count, elapsed = pattern.findall(report.read_text())[0]
-    badge = reports / 'unittest.svg'
+    badge = reports / 'tests.svg'
     badge.unlink(missing_ok=True)
-    session.run("anybadge", f"--value={count:}/{elapsed:}s", f"--file={badge:}", "--label=unittest")
+    session.run("anybadge", f"--value={count:}/{elapsed:}s", f"--file={badge:}", "--label=tests")
 
 
 @nox.session
@@ -70,9 +70,9 @@ def coverage(session):
 
 
 @nox.session
-def typehints(session):
+def types(session):
     """Package Type Hints Report"""
-    report = reports / "typehints.log"
+    report = reports / "types.log"
     # Result of mypy is cached and differential:
     with report.open("w") as handler:
         session.run("python", "-m", "mypy",
@@ -82,28 +82,29 @@ def typehints(session):
                           "with (?P<modules>[\d]+) modules, "
                           "and (?P<errors>[\d]+) errors\n(?P<status>[\w]+): "
                           "no issues found in (?P<sources>[\d]+) source files")
-    *_, status, files = pattern.findall(report.read_text())[0]
-    badge = reports / 'typehints.svg'
+    *_, status, files = pattern.findall(report.read_text())[0].lower()
+    badge = reports / 'types.svg'
     badge.unlink(missing_ok=True)
     session.run("anybadge", f"--value={status:}", f"--file={badge:}", "--label=type-hints")
 
 
 @nox.session
-def format(session):
-    """Package Code Format Report"""
-    report = reports / "codeformat.log"
+def styles(session):
+    """Package Code Styles Report"""
+    report = reports / "styles.log"
     with report.open("w") as handler:
         session.run("python", "-m", "isort", "--diff", ".", stdout=handler)#, success_codes=[0, 1])
         session.run("python", "-m", "black", "--check", "--diff", package,
                     stdout=handler, success_codes=[0, 1])
-    # pattern = re.compile(r"Build finished in (?P<elapsed>[.\d]+) seconds "
-    #                       "with (?P<modules>[\d]+) modules, "
-    #                       "and (?P<errors>[\d]+) errors\n(?P<status>[\w]+): "
-    #                       "no issues found in (?P<sources>[\d]+) source files")
-    # *_, status, files = pattern.findall(report.read_text())[0]
-    # badge = reports / 'typehints.svg'
-    # badge.unlink(missing_ok=True)
-    # session.run("anybadge", f"--value={status:}", f"--file={badge:}", "--label=type-hints")
+    pattern = re.compile(r"(?P<count>[\d]+) files would be reformatted")
+    result = pattern.findall(report.read_text())
+    badge = reports / 'styles.svg'
+    badge.unlink(missing_ok=True)
+    if result:
+        count = result[0]
+        session.run("anybadge", f"--value={count:}", f"--file={badge:}", "--color=red", "--label=code-style")
+    else:
+        session.run("anybadge", f"--value=black", f"--file={badge:}", "--color=black", "--label=code-style")
 
 
 @nox.session

@@ -38,7 +38,7 @@ quality:
   needs:
     - package
   script:
-    - nox --session tests linter coverage typehints
+    - nox --session tests linter coverage types styles
   artifacts:
     expire_in: 1 week
     paths:
