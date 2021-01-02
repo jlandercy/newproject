@@ -3,23 +3,17 @@
 This repository holds a minimal but complete `python3` package
 with the following quality services already included:
 
- - `setuptools` flow for packaging;
- - `unittest` test suite sub-package suited for Test Driven Development;
- - `coverage` for test suite;
- - `pylint` syntax checks;
- - `mypy` for type hints checks and errors;
- - `black` and `isort` for code formatting;
- - `jupyter` notebooks rendering (with Sphinx integration);
- - `Sphinx` documentation builder;
- - `anybadge` for any session badges;  
- - `nox` for session coordination;
- - GitHub or GitLab CI/CD flows.
-
-To check out available `nox` sessions, issue:
-
-```bash
-nox --list
-```
+ - [`setuptools`][100] flow for packaging;
+ - [`unittest`][101] test suite sub-package suited for Test Driven Development;
+ - [`coverage`][102] for test suite;
+ - [`pylint`][103] for syntax checks;
+ - [`mypy`][104] for type hints checks and errors;
+ - [`black`][105] and [`isort`][106] for code formatting;
+ - [`jupyter`][107] notebooks rendering (with Sphinx integration);
+ - [`Sphinx`][108] documentation builder;
+ - [`anybadge`][109] for any session badges;  
+ - [`nox`][110] for session coordination;
+ - GitLab CI Pipeline and GitHub Workflow (future).
 
 ## How to?
 
@@ -32,6 +26,36 @@ To start a new project from this package few steps are required:
  2. Clone the forked repository to your workspace;
  3. Rename the project by renaming the package directory;
  4. Start to implement your project as usual.
+
+### Check package capabilities
+
+If you are testing this package on a local machine, first makes sure
+all Code Quality packages are installed (defined in [`./docs/requirements.txt`][211]):
+
+```bash
+python -m pip install -r ./docs/requirements.txt
+```
+
+If you are running on a code quality environment or a [dedicated image][300]
+you may skip this step.
+
+Then, to check package capabilities (aka `nox` sessions), issue:
+
+```bash
+nox --list
+
+- clean -> Package Code Cleaner
+- package -> Package Builds (badge)
+- install -> Package Installer
+- uninstall -> Package Uninstaller
+* tests -> Package Test Suite Report (badge)
+* linter -> Package Linter Report (badge)
+* coverage -> Package Test Suite Coverage Report (badge)
+* types -> Package Type Hints Report (badge)
+* styles -> Package Code Styles Report (badge)
+- notebooks -> Package Notebooks (badge)
+- docs -> Package Documentation (badge)
+```
 
 ### Install package
 
@@ -48,66 +72,106 @@ This package follows the usual `setuptools` flow, installation is as simple as:
 python3 setup.py install
 ```
 
-This will install dependencies as well (as defined in `requirements.txt`).
+This will install dependencies as well (as defined in [`requirements.txt`][200]).
 
 To build a wheel and install from it, then issue:
 
 ```bash
-nox -s package install
+nox --session package install
 ```
 
 ### Test package
 
-To run the complete package test suite, issue:
+This package uses [`unittest`][101] to create its test suite,
+to run the complete package test suite, issue:
 
 ```bash
-nox -s tests
+nox --session tests
 ```
 
 ### Test coverage
 
+This package uses [`coverage`][102] to assess code coverage.
 To run the test suite coverage, issue:
 
 ```bash
-nox -s coverage
-```
-
-### Refresh notebooks
-
-To refresh all notebooks, first declare a new kernel with all dependencies installed.
-This will point towards the above created virtual environment:
-
-```bash
-nox -s notebooks
-```
-
-### Build documentation
-
-This package uses Sphinx to build documentation (see `docs/requirements.txt`).
-To generate the package documentation, issue:
-
-```bash
-nox -s docs
+nox --session coverage
 ```
 
 ### Check syntax
 
-To check python syntax, issue:
+This package uses [`pylint`][103] for syntax checks.
+To check package python syntax, issue:
 
 ```bash
-nox -s linter
+nox --session linter
 ```
-
-It will return the pylint score of the package and list all possible improvements.
 
 ### Check types
 
+This package uses [`mypy`][104] to check types hints.
 To check type hints and common errors, issue:
 
 ```bash
-nox -s types
+nox --session types
+```
+
+### Check styles
+
+This package uses [`black`][105] and [`isort`][106] to check or coerce python code styles.
+To check if your code is black, issue:
+
+```bash
+nox --session styles
+```
+
+To actually style package code inplace, issue:
+
+```bash
+nox --session clean
+```
+
+### Refresh notebooks
+
+This package uses [`jupyter`][107] notebooks for tests and documentation purposes.
+To refresh all notebooks, issue:
+
+```bash
+nox --session notebooks
+```
+
+Note: it will rely on previously defined virtual environment `venv`.
+
+
+### Build documentation
+
+This package uses [Sphinx][108] to build documentation.
+To generate the package documentation, issue:
+
+```bash
+nox --session docs
 ```
 
 ### Generate badges
 
-All badges are automatically generated for each `nox` session.
+All badges are automatically generated for each [`nox`][110]
+session using [`anybadge`][109] and related report
+contents (see [`noxfile.py`][210] for details).
+
+[100]: https://github.com/pypa/setuptools
+[101]: https://docs.python.org/3/library/unittest.html
+[102]: https://github.com/nedbat/coveragepy
+[103]: https://github.com/PyCQA/pylint
+[104]: https://github.com/python/mypy
+[105]: https://github.com/psf/black
+[106]: https://github.com/pycqa/isort/
+[107]: https://github.com/jupyter/notebook
+[108]: https://github.com/sphinx-doc/sphinx
+[109]: https://github.com/jongracecox/anybadge
+[110]: https://github.com/theacodes/nox
+
+[200]: ./requirements.txt
+[201]: `./docs/requirements.txt`
+[210]: ./noxfile.py
+
+[300]: https://hub.docker.com/repository/docker/jlandercy/python-challenge/general

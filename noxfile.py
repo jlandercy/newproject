@@ -32,7 +32,7 @@ def clean(session):
 
 @nox.session
 def package(session):
-    """Package Builds"""
+    """Package Builds (badge)"""
     report = reports_path / "package.log"
     with report.open("w") as handler:
         session.run("python", "setup.py", "sdist", "bdist_wheel", stdout=handler)
@@ -63,7 +63,7 @@ def uninstall(session):
 
 @nox.session
 def tests(session):
-    """Package Test Suite Report"""
+    """Package Test Suite Report (badge)"""
     report = reports_path / "tests.log"
     with report.open("w") as handler:
         session.run("python", "-m", "xmlrunner", "--output-file", str(reports_path / "tests.xml"),
@@ -77,7 +77,7 @@ def tests(session):
 
 @nox.session
 def linter(session):
-    """Package Linter Score"""
+    """Package Linter Report (badge)"""
     report = reports_path / "linter.log"
     with report.open("w") as handler:
         session.run(
@@ -94,7 +94,7 @@ def linter(session):
 
 @nox.session
 def coverage(session):
-    """Package Test Suite Coverage Score"""
+    """Package Test Suite Coverage Report (badge)"""
     env = {"COVERAGE_FILE": str(reports_path / "coverage.dat")}
     report = reports_path / "coverage.xml"
     session.run("python", "-m", "coverage", "run", "-m", "unittest",
@@ -111,7 +111,7 @@ def coverage(session):
 
 @nox.session
 def types(session):
-    """Package Type Hints Report"""
+    """Package Type Hints Report (badge)"""
     report = reports_path / "types.log"
     # Result of mypy is cached and differential:
     with report.open("w") as handler:
@@ -130,7 +130,7 @@ def types(session):
 
 @nox.session
 def styles(session):
-    """Package Code Styles Report"""
+    """Package Code Styles Report (badge)"""
     report = reports_path / "styles.log"
     with report.open("w") as handler:
         session.run("python", "-m", "isort", "--diff", ".", stdout=handler)
@@ -149,7 +149,7 @@ def styles(session):
 
 @nox.session
 def notebooks(session):
-    """Package Notebooks"""
+    """Package Notebooks (badge)"""
     report = reports_path / "notebooks.log"
     with report.open("w") as handler:
         session.run("python", "-m", "ipykernel", "install", "--name=venv", stderr=handler)
@@ -175,7 +175,7 @@ def notebooks(session):
 
 @nox.session
 def docs(session):
-    """Package Documentation"""
+    """Package Documentation (badge)"""
     report = reports_path / "docs.log"
     with report.open("w") as handler:
         session.run("sphinx-build", "-b", "html", f"docs/source", str(cache_path / "docs"),
