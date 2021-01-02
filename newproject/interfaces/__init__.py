@@ -14,3 +14,4 @@ or one of its subclasses.
 """
 
 from newproject.interfaces.generic import *
+from newproject.interfaces.examples import *

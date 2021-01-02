@@ -42,7 +42,7 @@ quality:
       - .cache/reports/*
     reports:
       junit:
-        - .cache/reports/unittest.xml
+        - .cache/reports/tests.xml
 
 notebooks:
   stage: tests
