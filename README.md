@@ -30,7 +30,7 @@ To start a new project from this package few steps are required:
 ### Check package capabilities
 
 If you are testing this package on a local machine, first makes sure
-all Code Quality packages are installed (defined in [`./docs/requirements.txt`][211]):
+all Code Quality packages are installed (defined in [`./docs/requirements.txt`][201]):
 
 ```bash
 python -m pip install -r ./docs/requirements.txt
