@@ -39,10 +39,10 @@ quality:
   artifacts:
     expire_in: 1 week
     paths:
-      - .cache/reports_path/*
+      - .cache/reports/*
     reports:
       junit:
-        - .cache/reports_path/unittest.xml
+        - .cache/reports/unittest.xml
 
 notebooks:
   stage: tests
@@ -52,13 +52,13 @@ notebooks:
     - package
   allow_failure: true
   script:
-    - nox --session packahe install
+    - nox --session package install
     - nox --session notebooks
   artifacts:
     expire_in: 1 week
     paths:
       - ./docs/source/notebooks/*
-      - .cache/reports_path/notebooks.log
+      - .cache/reports/notebooks.log
 
 documentation:
   stage: docs

@@ -53,7 +53,7 @@ This will install dependencies as well (as defined in `requirements.txt`).
 To build a wheel and install from it, then issue:
 
 ```bash
-nox --session package install
+nox -s package install
 ```
 
 ### Test package
