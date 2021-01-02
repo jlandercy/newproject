@@ -72,15 +72,17 @@ def coverage(session):
 def typehints(session):
     """Type Hints Report"""
     report = reports / "typehints.log"
+    # Result of my is cached and differential
     with report.open("w") as handler:
         session.run("python", "-m", "mypy",
                     "--cache-dir", str(reports.parent / ".mypy"),
                     "-v", package, stdout=handler)
-    #LOG:  Build finished in 1.718 seconds with 64 modules, and 0 errors
-    # Success: no issues found in 11 source files
-    # pattern = re.compile(r"Your code has been rated at (?P<score>[-.\d]*)/10")
-    # score = float(pattern.findall(report.read_text())[0])
-    # badge = reports / 'typehints.svg'
-    # if badge.exists():
-    #     badge.unlink()
-    # session.run("anybadge", f"--value={score:}/10", f"--file={badge:}", "pylint")
+    pattern = re.compile(r"Build finished in (?P<elapsed>[.\d]+) seconds "
+                          "with (?P<modules>[\d]+) modules, "
+                          "and (?P<errors>[\d]+) errors\n(?P<status>[\w]+): "
+                          "no issues found in (?P<sources>[\d]+) source files")
+    *_, status, files = pattern.findall(report.read_text())[0]
+    badge = reports / 'typehints.svg'
+    if badge.exists():
+        badge.unlink()
+    session.run("anybadge", f"--value={status:}", f"--file={badge:}", "--label=type-hints")
