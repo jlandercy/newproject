@@ -20,8 +20,9 @@ reports.mkdir(exist_ok=True)
 @nox.session
 def tests(session):
     """Test Suite"""
-    session.run("python", "-m", "xmlrunner", "-o", str(reports), "discover", "-v", f"{package:}.tests")
-    report = reports / "tests.log"
+    session.run("python", "-m", "xmlrunner", "--output-file", str(reports / "unittest.xml"),
+                "discover", "-v", f"{package:}.tests")
+    report = reports / "unittest.log"
     with report.open("w") as handler:
         session.run("python", "-m", "unittest", "discover", "-v", f"{package:}.tests", stdout=handler)
     pattern = re.compile(r"Ran (?P<count>[\d]+) tests in (?P<elapsed>[.\d]+)s")
