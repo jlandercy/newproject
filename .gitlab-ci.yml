@@ -38,14 +38,14 @@ quality:
   needs:
     - package
   script:
-    - nox --session tests linter coverage typehints notebooks
+    - nox --session tests linter coverage typehints
   artifacts:
     expire_in: 1 week
     paths:
-      - ./cache/reports
+      - .cache/reports/*
     reports:
       junit:
-        - ./cache/reports/unittest.xml
+        - .cache/reports/unittest.xml
 
 documentation:
   stage: docs
@@ -58,4 +58,4 @@ documentation:
   artifacts:
     expire_in: 1 week
     paths:
-      - .cache/docs
+      - .cache/docs/*
