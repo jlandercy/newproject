@@ -1,12 +1,15 @@
 import re
 import os
 import pathlib
+import subprocess
 
 import nox
 from lxml import etree
 
 
 # Settings:
+
+os.environ["PATH"] = r"c:\...\pywin32_system32;" + os.environ["PATH"]
 
 nox.options.envdir = ".cache"
 if os.name == 'nt':
@@ -98,12 +101,12 @@ def notebooks(session):
     """Package Notebooks"""
     report = reports / "notebooks.log"
     with report.open("w") as handler:
-        #session.run("python", "-m", "ipykernel", "install", f"--name={package:}")
+        session.run("python", "-m", "ipykernel", "install", "--name=venv")
         session.run(
             #"python", "-m",
             "jupyter", "nbconvert", "--debug",
             "--ExecutePreprocessor.timeout=600",
-            #f"--ExecutePreprocessor.kernel_name={package:}"
+            "--ExecutePreprocessor.kernel_name=venv"
             "--inplace", "--clear-output", "--to", "notebook",
             "--execute", "./docs/source/notebooks/*.ipynb",
             stdout=handler
