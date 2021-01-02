@@ -9,11 +9,8 @@ from lxml import etree
 
 # Settings:
 
-os.environ["PATH"] = r"c:\...\pywin32_system32;" + os.environ["PATH"]
-
 nox.options.envdir = ".cache"
-if os.name == 'nt':
-    nox.options.default_venv_backend = "none"
+nox.options.default_venv_backend = "none"
 
 cache = pathlib.Path(nox.options.envdir)
 cache.mkdir(exist_ok=True)
@@ -100,17 +97,25 @@ def typehints(session):
 def notebooks(session):
     """Package Notebooks"""
     report = reports / "notebooks.log"
-    with report.open("w") as handler:
-        session.run("python", "-m", "ipykernel", "install", "--name=venv")
-        session.run(
-            #"python", "-m",
-            "jupyter", "nbconvert", "--debug",
-            "--ExecutePreprocessor.timeout=600",
-            "--ExecutePreprocessor.kernel_name=venv"
-            "--inplace", "--clear-output", "--to", "notebook",
-            "--execute", "./docs/source/notebooks/*.ipynb",
-            stdout=handler
-        )
+    process = subprocess.run([
+        "jupyter", "nbconvert", "--debug",
+        "--ExecutePreprocessor.timeout=600",
+        "--ExecutePreprocessor.kernel_name=venv"
+        "--inplace", "--clear-output", "--to", "notebook",
+        "--execute", "./docs/source/notebooks/*.ipynb",
+    ])
+    print(process.stdout, process.stderr)
+    # with report.open("w") as handler:
+    #     session.run("python", "-m", "ipykernel", "install", "--name=venv")
+    #     session.run(
+    #         #"python", "-m",
+    #         "jupyter", "nbconvert", "--debug",
+    #         "--ExecutePreprocessor.timeout=600",
+    #         "--ExecutePreprocessor.kernel_name=venv"
+    #         "--inplace", "--clear-output", "--to", "notebook",
+    #         "--execute", "./docs/source/notebooks/*.ipynb",
+    #         stdout=handler
+    #     )
     # pattern = re.compile(r"build (?P<status>[\w]+).")
     # status = pattern.findall(report.read_text())[0]
     # badge = reports / 'docs.svg'
