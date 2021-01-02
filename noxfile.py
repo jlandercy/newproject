@@ -8,6 +8,7 @@ from lxml import etree
 
 nox.options.envdir = ".cache"
 nox.options.default_venv_backend = "none"
+nox.options.sessions = ["tests", "linter", "coverage", "types", "styles"]
 
 cache_path = pathlib.Path(nox.options.envdir)
 cache_path.mkdir(exist_ok=True)
