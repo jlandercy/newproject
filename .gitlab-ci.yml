@@ -59,7 +59,7 @@ notebooks:
   artifacts:
     expire_in: 1 week
     paths:
-      - .docs/source/notebooks/*
+      - ./docs/source/notebooks/*
       - .cache/reports/notebooks.log
 
 documentation:

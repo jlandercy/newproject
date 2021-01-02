@@ -97,25 +97,20 @@ def typehints(session):
 def notebooks(session):
     """Package Notebooks"""
     report = reports / "notebooks.log"
-    process = subprocess.run([
-        "jupyter", "nbconvert", "--debug",
-        "--ExecutePreprocessor.timeout=600",
-        "--ExecutePreprocessor.kernel_name=venv"
-        "--inplace", "--clear-output", "--to", "notebook",
-        "--execute", "./docs/source/notebooks/*.ipynb",
-    ])
-    print(process.stdout, process.stderr)
-    # with report.open("w") as handler:
-    #     session.run("python", "-m", "ipykernel", "install", "--name=venv")
-    #     session.run(
-    #         #"python", "-m",
-    #         "jupyter", "nbconvert", "--debug",
-    #         "--ExecutePreprocessor.timeout=600",
-    #         "--ExecutePreprocessor.kernel_name=venv"
-    #         "--inplace", "--clear-output", "--to", "notebook",
-    #         "--execute", "./docs/source/notebooks/*.ipynb",
-    #         stdout=handler
-    #     )
+    with report.open("w") as handler:
+        session.run("python", "-m", "ipykernel", "install", "--name=venv")
+        session.run(
+            "python", "-m",
+            "jupyter", "nbconvert", "--debug",
+            "--ExecutePreprocessor.timeout=600",
+            "--ExecutePreprocessor.kernel_name=venv",
+            "--inplace", "--clear-output", "--to", "notebook",
+            "--execute", "./docs/source/notebooks/*.ipynb",
+            stderr=handler,
+            #success_codes=[0, 1]
+        )
+    with report.open() as handler:
+        session.log(handler.read())
     # pattern = re.compile(r"build (?P<status>[\w]+).")
     # status = pattern.findall(report.read_text())[0]
     # badge = reports / 'docs.svg'
