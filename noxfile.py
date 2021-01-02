@@ -21,8 +21,17 @@ reports_path.mkdir(exist_ok=True)
 # Sessions:
 
 @nox.session
+def clean(session):
+    """Package Code Cleaner"""
+    report = reports_path / "clean.log"
+    with report.open("w") as handler:
+        session.run("python", "-m", "isort", ".", stdout=handler)
+        session.run("python", "-m", "black", package_name, stdout=handler)
+
+
+@nox.session
 def package(session):
-    """Package build"""
+    """Package Builds"""
     report = reports_path / "package.log"
     with report.open("w") as handler:
         session.run("python", "setup.py", "sdist", "bdist_wheel", stdout=handler)
@@ -103,7 +112,7 @@ def styles(session):
     """Package Code Styles Report"""
     report = reports_path / "styles.log"
     with report.open("w") as handler:
-        session.run("python", "-m", "isort", "--diff", ".", stdout=handler)#, success_codes=[0, 1])
+        session.run("python", "-m", "isort", "--diff", ".", stdout=handler)
         session.run("python", "-m", "black", "--check", "--diff", package_name,
                     stdout=handler, success_codes=[0, 1])
     pattern = re.compile(r"(?P<count>[\d]+) files would be reformatted")
