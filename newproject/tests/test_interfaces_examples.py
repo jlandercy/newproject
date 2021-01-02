@@ -18,7 +18,9 @@ class TestSimpleCase(TestGenericInterfaceImplementation, unittest.TestCase):
     json_configuration = """{"value": "Hello World!"}"""
 
 
-class TestSimpleCaseWithNoSerializer(TestGenericInterfaceImplementation, unittest.TestCase):
+class TestSimpleCaseWithNoSerializer(
+    TestGenericInterfaceImplementation, unittest.TestCase
+):
 
     factory = SimpleCase
     dict_configuration = {"value": datetime.datetime(2020, 1, 1)}
@@ -32,9 +34,10 @@ class TestSimpleCaseWithNoSerializer(TestGenericInterfaceImplementation, unittes
             super().test_to_json_configuration()
 
 
-class TestSimpleCaseWithSerializer(TestGenericInterfaceImplementation, unittest.TestCase):
+class TestSimpleCaseWithSerializer(
+    TestGenericInterfaceImplementation, unittest.TestCase
+):
 
     factory = SimpleCaseWithSerializer
     dict_configuration = {"value": datetime.datetime(2020, 1, 1)}
     json_configuration = """{"value": "2020-01-01T00:00:00"}"""
-

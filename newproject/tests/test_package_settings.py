@@ -22,6 +22,8 @@ class TestSettings(unittest.TestCase):
         """
         Test namespace keys
         """
-        self.assertTrue({"package", "user", "resources", "uuid4"}
-                        .issubset(settings.settings.__dict__))
-
+        self.assertTrue(
+            {"package", "user", "resources", "uuid4"}.issubset(
+                settings.settings.__dict__
+            )
+        )

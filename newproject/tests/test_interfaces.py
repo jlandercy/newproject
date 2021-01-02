@@ -10,7 +10,6 @@ from newproject.interfaces import GenericInterface
 
 
 class TestGenericInterface(unittest.TestCase):
-
     def test_abstract_class(self) -> None:
         with self.assertRaises(TypeError) as context:
             instance = GenericInterface()

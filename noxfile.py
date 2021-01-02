@@ -90,6 +90,23 @@ def typehints(session):
 
 
 @nox.session
+def format(session):
+    """Package Code Format Report"""
+    report = reports / "codeformat.log"
+    with report.open("w") as handler:
+        session.run("python", "-m", "black", "--check", "--diff", package,
+                    stdout=handler, success_codes=[0, 1])
+    # pattern = re.compile(r"Build finished in (?P<elapsed>[.\d]+) seconds "
+    #                       "with (?P<modules>[\d]+) modules, "
+    #                       "and (?P<errors>[\d]+) errors\n(?P<status>[\w]+): "
+    #                       "no issues found in (?P<sources>[\d]+) source files")
+    # *_, status, files = pattern.findall(report.read_text())[0]
+    # badge = reports / 'typehints.svg'
+    # badge.unlink(missing_ok=True)
+    # session.run("anybadge", f"--value={status:}", f"--file={badge:}", "--label=type-hints")
+
+
+@nox.session
 def notebooks(session):
     """Package Notebooks"""
     report = reports / "notebooks.log"
