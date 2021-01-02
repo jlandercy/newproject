@@ -24,7 +24,7 @@ package:
   tags:
     - build
   script:
-    - python setup.py sdist bdist_wheel
+    - nox --session package
     - python -m pip install ./dist/*.whl
   artifacts:
     expire_in: 1 week
@@ -36,23 +36,23 @@ quality:
   tags:
     - tests
   needs:
-    - package
+    - package_name
   script:
     - nox --session tests linter coverage types styles
   artifacts:
     expire_in: 1 week
     paths:
-      - .cache/reports/*
+      - .cache/reports_path/*
     reports:
       junit:
-        - .cache/reports/unittest.xml
+        - .cache/reports_path/unittest.xml
 
 notebooks:
   stage: tests
   tags:
     - tests
   needs:
-    - package
+    - package_name
   allow_failure: true
   script:
     - nox --session notebooks
@@ -60,7 +60,7 @@ notebooks:
     expire_in: 1 week
     paths:
       - ./docs/source/notebooks/*
-      - .cache/reports/notebooks.log
+      - .cache/reports_path/notebooks.log
 
 documentation:
   stage: docs
