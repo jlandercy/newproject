@@ -1,13 +1,18 @@
 # Python New Project Package
 
-This repository holds a minimal `python3` package with the following services
-already included:
+This repository holds a minimal but complete `python3` package
+with the following quality services already included:
 
  - `setuptools` flow for packaging;
- - Test Suite sub-package for Test Driven Development;
- - Code Coverage for Test Suite;
- - PyLint syntax checking; 
- - Sphinx documentation builder (including notebooks rendering);
+ - `unittest` test suite sub-package suited for Test Driven Development;
+ - `coverage` for test suite;
+ - `pylint` syntax checks;
+ - `mypy` for type hints checks and errors;
+ - `black` and `isort` for code formatting;
+ - `jupyter` notebooks rendering (with Sphinx integration);
+ - `Sphinx` documentation builder;
+ - `anybadge` for any session badges;  
+ - `nox` for session coordination;
  - GitHub or GitLab CI/CD flows.
 
 ## How to?
@@ -51,13 +56,7 @@ python3 -m pip install ./dist/*.whl
 To run the complete package test suite, issue:
 
 ```bash
-python -m unittest discover -v newproject.tests
-```
-
-To generate XML report, issue instead:
-
-```bash
-python3 -m xmlrunner discover newproject.tests
+nox -s tests
 ```
 
 ### Test coverage
@@ -65,8 +64,16 @@ python3 -m xmlrunner discover newproject.tests
 To run the test suite coverage, issue:
 
 ```bash
-python3 -m coverage run -m unittest discover -v newproject.tests
-python3 -m coverage report
+nox -s coverage
+```
+
+### Refresh notebooks
+
+To refresh all notebooks, first declare a new kernel with all dependencies installed.
+This will point towards the above created virtual environment:
+
+```bash
+nox -s notebooks
 ```
 
 ### Build documentation
@@ -75,34 +82,7 @@ This package uses Sphinx to build documentation (see `docs/requirements.txt`).
 To generate the package documentation, issue:
 
 ```bash
-make --directory=./docs/ html
-```
-
-Or:
-
-```bash
-sphinx-build -b html source build/html
-```
-
-
-
-### Refresh notebooks
-
-To refresh all notebooks, first declare a new kernel with all dependencies installed.
-This will point towards the above created virtual environment:
-
-```bash
-python3 -m ipykernel install --name=venv
-```
-
-Then refresh all notebooks using the above defined kernel:
-
-```bash
-python3 -m jupyter nbconvert --debug \
-        --ExecutePreprocessor.timeout=600 \
-        --ExecutePreprocessor.kernel_name=venv \
-        --inplace --clear-output --to notebook \
-        --execute ./docs/source/notebooks/*.ipynb
+nox -s docs
 ```
 
 ### Check syntax
@@ -110,7 +90,7 @@ python3 -m jupyter nbconvert --debug \
 To check python syntax, issue:
 
 ```bash
-pylint newproject
+nox -s linter
 ```
 
 It will return the pylint score of the package and list all possible improvements.
@@ -120,15 +100,9 @@ It will return the pylint score of the package and list all possible improvement
 To check type hints and common errors, issue:
 
 ```bash
-mypy -v newproject
+nox -s typehints
 ```
 
 ### Generate badges
 
-To generate badges, issue the following commands:
-
-```bash
-anybadge --value=2.22 --file=pylint.svg pylint
-anybadge --value=65 --file=coverage.svg coverage
-anybadge --label=pipeline --value=passing --file=pipeline.svg passing=green failing=red
-```
+All badges are automatically generated for each `nox` session.
