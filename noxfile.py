@@ -32,8 +32,7 @@ def tests(session):
     pattern = re.compile(r"Ran (?P<count>[\d]+) tests in (?P<elapsed>[.\d]+)s")
     count, elapsed = pattern.findall(report.read_text())[0]
     badge = reports / 'unittest.svg'
-    if badge.exists():
-        badge.unlink()
+    badge.unlink(missing_ok=True)
     session.run("anybadge", f"--value={count:}/{elapsed:}s", f"--file={badge:}", "--label=unittest")
 
 
@@ -50,8 +49,7 @@ def linter(session):
     pattern = re.compile(r"Your code has been rated at (?P<score>[-.\d]*)/10")
     score = float(pattern.findall(report.read_text())[0])
     badge = reports / 'linter.svg'
-    if badge.exists():
-        badge.unlink()
+    badge.unlink(missing_ok=True)
     session.run("anybadge", f"--value={score:}/10", f"--file={badge:}", "--label=linter", "pylint")
 
 
@@ -68,8 +66,7 @@ def coverage(session):
         root = etree.XML(handler.read())
     score = float(root.get("line-rate"))*100.
     badge = reports / 'coverage.svg'
-    if badge.exists():
-        badge.unlink()
+    badge.unlink(missing_ok=True)
     session.run("anybadge", f"--value={score:}%", f"--file={badge:}", "coverage")
 
 
@@ -88,8 +85,7 @@ def typehints(session):
                           "no issues found in (?P<sources>[\d]+) source files")
     *_, status, files = pattern.findall(report.read_text())[0]
     badge = reports / 'typehints.svg'
-    if badge.exists():
-        badge.unlink()
+    badge.unlink(missing_ok=True)
     session.run("anybadge", f"--value={status:}", f"--file={badge:}", "--label=type-hints")
 
 
@@ -98,7 +94,7 @@ def notebooks(session):
     """Package Notebooks"""
     report = reports / "notebooks.log"
     with report.open("w") as handler:
-        session.run("python", "-m", "ipykernel", "install", "--name=venv")
+        session.run("python", "-m", "ipykernel", "install", "--name=venv", stderr=handler)
         session.run(
             "python", "-m",
             "jupyter", "nbconvert", "--debug",
@@ -107,16 +103,16 @@ def notebooks(session):
             "--inplace", "--clear-output", "--to", "notebook",
             "--execute", "./docs/source/notebooks/*.ipynb",
             stderr=handler,
-            #success_codes=[0, 1]
+            success_codes=[0, 1]
         )
     with report.open() as handler:
         session.log(handler.read())
-    # pattern = re.compile(r"build (?P<status>[\w]+).")
-    # status = pattern.findall(report.read_text())[0]
-    # badge = reports / 'docs.svg'
-    # if badge.exists():
-    #     badge.unlink()
-    # session.run("anybadge", f"--value={status:}", f"--file={badge:}", "--label=docs")
+    pattern = re.compile(r"[NbConvertApp] Writing (?P<bytes>[\d]+) bytes to ")
+    count = len(pattern.findall(report.read_text()))
+    badge = reports / 'notebooks.svg'
+    badge.unlink(missing_ok=True)
+    session.run("anybadge", f"--value={count:}", f"--file={badge:}", "--label=notebooks",
+                "1=red", "2=orange", "3=green")
 
 
 @nox.session

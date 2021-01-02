@@ -28,7 +28,7 @@ setup(
        _package: ["resources/*"]
     },
     scripts=[],
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     install_requires=requirements,
     classifiers=[
         "Intended Audience :: Science/Research",
