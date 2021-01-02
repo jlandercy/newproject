@@ -1,11 +1,10 @@
-import re
 import os
 import pathlib
+import re
 import subprocess
 
 import nox
 from lxml import etree
-
 
 # Settings:
 
@@ -94,6 +93,7 @@ def format(session):
     """Package Code Format Report"""
     report = reports / "codeformat.log"
     with report.open("w") as handler:
+        session.run("python", "-m", "isort", "--diff", ".", stdout=handler)#, success_codes=[0, 1])
         session.run("python", "-m", "black", "--check", "--diff", package,
                     stdout=handler, success_codes=[0, 1])
     # pattern = re.compile(r"Build finished in (?P<elapsed>[.\d]+) seconds "

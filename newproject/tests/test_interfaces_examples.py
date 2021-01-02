@@ -4,11 +4,11 @@ class :class:`newproject.tests.test_interfaces.TestGenericInterfaceImplementatio
 and interface examples defined in module :mod:`newproject.interfaces.examples`.
 """
 
-import unittest
 import datetime
+import unittest
 
-from newproject.tests.test_interfaces import TestGenericInterfaceImplementation
 from newproject.interfaces.examples import SimpleCase, SimpleCaseWithSerializer
+from newproject.tests.test_interfaces import TestGenericInterfaceImplementation
 
 
 class TestSimpleCase(TestGenericInterfaceImplementation, unittest.TestCase):

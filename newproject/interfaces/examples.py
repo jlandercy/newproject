@@ -5,8 +5,8 @@ implemented interfaces properties (see :py:mod:`newproject.tests.test_interfaces
 and :py:mod:`newproject.tests.test_interfaces_examples` modules for operational details).
 """
 
-from typing import Any
 import datetime
+from typing import Any
 
 from newproject.interfaces.generic import GenericInterface
 

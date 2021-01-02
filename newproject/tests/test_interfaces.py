@@ -3,8 +3,8 @@ Module :mod:`newproject.tests.test_interfaces` implements test suite for the
 class :class:`newproject.interfaces.generic.GenericInterface` and its children.
 """
 
-import unittest
 import json
+import unittest
 
 from newproject.interfaces import GenericInterface
 

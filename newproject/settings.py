@@ -2,13 +2,12 @@
 Settings module
 """
 
+import json
+import logging.config
 import os
+import pathlib
 import sys
 import uuid
-import pathlib
-import logging.config
-import json
-
 from types import SimpleNamespace
 
 # Settings Namespace:
