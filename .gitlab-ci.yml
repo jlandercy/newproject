@@ -1,4 +1,4 @@
-image: gitlab.sc.ulb.ac.be/smartcampus/dependency_proxy/containers/jlandercy/python-challenge:1.0
+image: gitlab.sc.ulb.ac.be/smartcampus/dependency_proxy/containers/jlandercy/python-challenge:1.1
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
