@@ -100,7 +100,7 @@ def notebooks(session):
     with report.open("w") as handler:
         #session.run("python", "-m", "ipykernel", "install", f"--name={package:}")
         session.run(
-            "python", "-m",
+            #"python", "-m",
             "jupyter", "nbconvert", "--debug",
             "--ExecutePreprocessor.timeout=600",
             #f"--ExecutePreprocessor.kernel_name={package:}"
