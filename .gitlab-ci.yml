@@ -1,4 +1,4 @@
-image: jlandercy/python-qc:3.8
+image: gitlab.sc.ulb.ac.be/smartcampus/dependency_proxy/containers/jlandercy/python-qc:3.8
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -43,6 +43,7 @@ quality:
     reports:
       junit:
         - .cache/reports/tests.xml
+        - .cache/reports/syntax.xml
 
 notebooks:
   stage: tests
