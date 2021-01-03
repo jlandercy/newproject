@@ -30,15 +30,14 @@ To start a new project from this package few steps are required:
 
 ### Check package capabilities
 
-If you are testing this package on a local machine, first makes sure
-all Code Quality packages are installed (defined in [`./docs/requirements.txt`][201]):
+Running Code Quality tool suite for this package requires
+Code Quality packages are installed (defined in [`./docs/requirements.txt`][201]):
 
 ```bash
 python -m pip install -r ./docs/requirements.txt
 ```
 
-If you are running on a code quality environment or a [dedicated image][300]
-you may skip this step.
+Code Quality environment is also available in a dedicated [Docker image][300].
 
 Then, to check package capabilities (aka `nox` sessions), issue:
 
@@ -116,7 +115,7 @@ This package uses [`pylint`][103] and [`flake8`][112] for syntax checks.
 To check package python syntax, issue:
 
 ```bash
-nox --session linter
+nox --session linter syntax
 ```
 
 ### Check types
@@ -137,7 +136,7 @@ To check if your code is black, issue:
 nox --session styles
 ```
 
-To actually style package code inplace, issue:
+To actually style the package code inplace, issue:
 
 ```bash
 nox --session clean

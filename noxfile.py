@@ -89,7 +89,7 @@ def coverage(session):
     score = float(root.get("line-rate"))*100.
     badge = reports_path / 'coverage.svg'
     badge.unlink(missing_ok=True)
-    session.run("anybadge", f"--value={score:}%", f"--file={badge:}", "coverage")
+    session.run("anybadge", f"--value={score:}", f"--file={badge:}", "coverage")
 
 
 @nox.session
