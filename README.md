@@ -6,7 +6,8 @@ with the following quality services already included:
  - [`setuptools`][100] flow for packaging;
  - [`unittest`][101] test suite sub-package suited for Test Driven Development;
  - [`coverage`][102] for test suite;
- - [`pylint`][103] for syntax checks;
+ - [`bandit`][111] for security tests;
+ - [`pylint`][103] and [`flake8`][112] for syntax checks;
  - [`mypy`][104] for type hints checks and errors;
  - [`black`][105] and [`isort`][106] for code formatting;
  - [`jupyter`][107] notebooks rendering (with Sphinx integration);
@@ -49,8 +50,10 @@ nox --list
 - install -> Package Installer
 - uninstall -> Package Uninstaller
 * tests -> Package Test Suite Report (badge)
-* linter -> Package Linter Report (badge)
 * coverage -> Package Test Suite Coverage Report (badge)
+* security -> Package Security Report (badges)
+* linter -> Package Linter Report (badge)
+* syntax -> Package Syntax Report (badge)
 * types -> Package Type Hints Report (badge)
 * styles -> Package Code Styles Report (badge)
 - notebooks -> Package Notebooks (badge)
@@ -98,9 +101,18 @@ To run the test suite coverage, issue:
 nox --session coverage
 ```
 
+### Check security
+
+This package uses [`bandit`][101] for security checks.
+To check package python security know vulnerabilities, issue:
+
+```bash
+nox --session security
+```
+
 ### Check syntax
 
-This package uses [`pylint`][103] for syntax checks.
+This package uses [`pylint`][103] and [`flake8`][112] for syntax checks.
 To check package python syntax, issue:
 
 ```bash
@@ -169,6 +181,9 @@ contents (see [`noxfile.py`][210] for details).
 [108]: https://github.com/sphinx-doc/sphinx
 [109]: https://github.com/jongracecox/anybadge
 [110]: https://github.com/theacodes/nox
+[111]: https://github.com/PyCQA/bandit
+[112]: https://github.com/PyCQA/flake8
+[113]: https://github.com/initios/flake8-junit-report
 
 [200]: ./requirements.txt
 [201]: ./docs/requirements.txt

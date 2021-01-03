@@ -35,7 +35,7 @@ quality:
   tags:
     - tests
   script:
-    - nox --session tests linter coverage types styles
+    - nox
   artifacts:
     expire_in: 1 week
     paths:

@@ -13,5 +13,5 @@ Any interface must inherit either from :class:`newproject.interfaces.generic.Gen
 or one of its subclasses.
 """
 
-from newproject.interfaces.generic import *
 from newproject.interfaces.examples import *
+from newproject.interfaces.generic import *

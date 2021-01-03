@@ -1,3 +1,4 @@
+import json
 import pathlib
 import re
 
@@ -8,7 +9,7 @@ from lxml import etree
 
 nox.options.envdir = ".cache"
 nox.options.default_venv_backend = "none"
-nox.options.sessions = ["tests", "linter", "coverage", "types", "styles"]
+nox.options.sessions = ["tests", "coverage", "security", "linter", "syntax", "types", "styles"]
 
 cache_path = pathlib.Path(nox.options.envdir)
 cache_path.mkdir(exist_ok=True)
@@ -44,7 +45,6 @@ def package(session):
 @nox.session
 def install(session):
     """Package Installer"""
-    #package(session)
     wheels = [str(file) for file in pathlib.Path("./dist").glob("*.whl")]
     if not wheels:
         session.error("No wheel found, first package then install")
@@ -76,6 +76,44 @@ def tests(session):
 
 
 @nox.session
+def coverage(session):
+    """Package Test Suite Coverage Report (badge)"""
+    env = {"COVERAGE_FILE": str(reports_path / "coverage.dat")}
+    report = reports_path / "coverage.xml"
+    session.run("python", "-m", "coverage", "run", "-m", "unittest",
+                "discover", "-v", f"{package_name:}.tests", env=env)
+    session.run("python", "-m", "coverage", "report", "--omit=venv/**/*", env=env)
+    session.run("python", "-m", "coverage", "xml", "-o", f"{report:}", env=env)
+    with report.open() as handler:
+        root = etree.XML(handler.read())
+    score = float(root.get("line-rate"))*100.
+    badge = reports_path / 'coverage.svg'
+    badge.unlink(missing_ok=True)
+    session.run("anybadge", f"--value={score:}%", f"--file={badge:}", "coverage")
+
+
+@nox.session
+def security(session):
+    """Package Security Report (badges)"""
+    logs = reports_path / "security.log"
+    report = reports_path / "security.json"
+    with logs.open("w") as handler:
+        session.run("bandit", "-v", "-f", "json", "-o", str(report),
+                    "-r", package_name, stdout=handler)
+    with report.open() as handler:
+        results = json.load(handler)["metrics"]["_totals"]
+    for key in results.keys():
+        if key.startswith('SEVERITY'):
+            value = int(results[key])
+            level = key.split(".")[-1].lower()
+            label = f"security-{level:}"
+            badge = reports_path / f"{label:}.svg"
+            badge.unlink(missing_ok=True)
+            session.run("anybadge", f"--value={value:}", f"--file={badge:}", f"--label={label:}",
+                        "1=green", "2=red")
+
+
+@nox.session
 def linter(session):
     """Package Linter Report (badge)"""
     report = reports_path / "linter.log"
@@ -93,20 +131,22 @@ def linter(session):
 
 
 @nox.session
-def coverage(session):
-    """Package Test Suite Coverage Report (badge)"""
-    env = {"COVERAGE_FILE": str(reports_path / "coverage.dat")}
-    report = reports_path / "coverage.xml"
-    session.run("python", "-m", "coverage", "run", "-m", "unittest",
-                "discover", "-v", f"{package_name:}.tests", env=env)
-    session.run("python", "-m", "coverage", "report", "--omit=venv/**/*", env=env)
-    session.run("python", "-m", "coverage", "xml", "-o", f"{report:}", env=env)
-    with report.open() as handler:
+def syntax(session):
+    """Package Syntax Report (badge)"""
+    logs = reports_path / "syntax.log"
+    report = logs.with_suffix('.xml')
+    logs.unlink(missing_ok=True)
+    session.run("flake8", "-v", "--tee", "--exit-zero", "--output-file", str(logs), package_name)
+    session.run("flake8_junit", str(logs), str(report))
+    with report.open("rb") as handler:
         root = etree.XML(handler.read())
-    score = float(root.get("line-rate"))*100.
-    badge = reports_path / 'coverage.svg'
-    badge.unlink(missing_ok=True)
-    session.run("anybadge", f"--value={score:}%", f"--file={badge:}", "coverage")
+    for key in ["errors", "failures"]:
+        value = root.get(key)
+        label = f"syntax-{key:}"
+        badge = reports_path / f"{label:}.svg"
+        badge.unlink(missing_ok=True)
+        session.run("anybadge", f"--value={value:}", f"--file={badge:}", f"--label={label:}",
+                    "1=green", "2=red")
 
 
 @nox.session
