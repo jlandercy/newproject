@@ -188,4 +188,4 @@ contents (see [`noxfile.py`][210] for details).
 [201]: ./docs/requirements.txt
 [210]: ./noxfile.py
 
-[300]: https://hub.docker.com/repository/docker/jlandercy/python-challenge/general
+[300]: https://hub.docker.com/r/jlandercy/python-qc/tags?page=1&ordering=last_updated
