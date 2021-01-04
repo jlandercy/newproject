@@ -15,6 +15,21 @@ class SimpleCase(GenericInterface):
     """
     This class shows a simple case of :class:`newproject.interfaces.generic.GenericInterface`
     implementation with no serializer.
+
+    A basic example of :class:`newproject.interfaces.examples.SimpleCase` is shown below.
+    It illustrates native capabilities of such a class:
+
+    .. code-block:: python
+
+        a = SimpleCase(value="dummy")
+        a.to_dict()  # returns: {"value": "dummy"}
+        a.to_json()  # returns: '{"value": "dummy"}'
+        b = SimpleCase(**a.to_dict())
+        a.to_dict() == b.to_dict()  # returns: True
+
+    The purpose of :meth:`to_dict` is to export instance configuration and be able
+    to recreate an equal object from it. Of course it should be JSON serializable as
+    well in order to safely exchange configurations.
     """
 
     def __init__(self, value: Any = None) -> None:
@@ -35,6 +50,16 @@ class SimpleCaseWithSerializer(SimpleCase):
     This class shows a simple case inherited from :class:`SimpleCase` with serializer.
     It overrides the :meth:`newproject.interfaces.generic.GenericInterface.serializer`
     method in order to provide the missing helper for :class:`datetime.datetime` object.
+
+    .. code-block:: python
+
+        import datetime
+
+        t = datetime.datetime(2021, 1, 1)
+        c = SimpleCaseWithSerializer(value=t)
+        c.to_dict()  # returns: {"value": datetime.datetime(2021, 1, 1, 0, 0)}
+        c.to_json()  # returns: '{"value": "2021-01-01T00:00:00"}'
+
     """
 
     @staticmethod
