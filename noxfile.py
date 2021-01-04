@@ -67,7 +67,7 @@ def tests(session):
     report = reports_path / "tests.log"
     with report.open("w") as handler:
         session.run("python", "-m", "xmlrunner", "--output-file", str(reports_path / "tests.xml"),
-                    "discover", "-v", f"{package_name:}.tests", stdout=handler)
+                    "discover", "-v", "tests", stdout=handler)
     pattern = re.compile(r"Ran (?P<count>[\d]+) tests in (?P<elapsed>[.\d]+)s")
     count, elapsed = pattern.findall(report.read_text())[0]
     badge = reports_path / 'tests.svg'
@@ -81,7 +81,7 @@ def coverage(session):
     env = {"COVERAGE_FILE": str(reports_path / "coverage.dat")}
     report = reports_path / "coverage.xml"
     session.run("python", "-m", "coverage", "run", "-m", "unittest",
-                "discover", "-v", f"{package_name:}.tests", env=env)
+                "discover", "-v", "tests", env=env)
     session.run("python", "-m", "coverage", "report", "--omit=venv/**/*", env=env)
     session.run("python", "-m", "coverage", "xml", "-o", f"{report:}", env=env)
     with report.open() as handler:
@@ -119,7 +119,15 @@ def safety(session):
     logs = reports_path / "security.log"
     report = reports_path / "safety.json"
     with logs.open("w") as handler:
-        session.run("safety", "--full-report", "--json", stdout=handler)
+        session.run("safety", "check", "--full-report", "--json",
+                    "--output", str(report), stdout=handler)
+    with report.open() as handler:
+        results = json.load(handler)
+    count = len(results)
+    badge = reports_path / "safety.svg"
+    badge.unlink(missing_ok=True)
+    session.run("anybadge", f"--value={count:}", f"--file={badge:}", f"--label=safety",
+                "1=green", "2=red")
 
 
 @nox.session
