@@ -34,7 +34,7 @@ Running Code Quality tool suite for this package requires
 Code Quality packages are installed (defined in [`./docs/requirements.txt`][201]):
 
 ```bash
-python -m pip install -r ./docs/requirements.txt
+python -m pip install -r ./docs/requirements_ci.txt
 ```
 
 Code Quality environment is also available in a dedicated [Docker image][300].
@@ -185,7 +185,7 @@ contents (see [`noxfile.py`][210] for details).
 [113]: https://github.com/initios/flake8-junit-report
 
 [200]: ./requirements.txt
-[201]: ./docs/requirements.txt
+[201]: requirements_ci.txt
 [210]: ./noxfile.py
 
 [300]: https://hub.docker.com/r/jlandercy/python-qc/tags?page=1&ordering=last_updated
