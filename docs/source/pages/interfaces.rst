@@ -30,14 +30,3 @@ and do provide a serializer:
 
 .. autoclass:: newproject.interfaces.examples.SimpleCaseWithSerializer
    :members:
-
-Those classes are then used to derive unit test cases in order to check and validate
-expected behaviours.
-
-.. automodule:: newproject.tests.test_interfaces
-
-.. automodule:: newproject.tests.test_interfaces_examples
-
-.. autoclass:: newproject.tests.test_interfaces.TestGenericInterfaceImplementation
-   :members:
-

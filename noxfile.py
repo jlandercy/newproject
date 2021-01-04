@@ -9,7 +9,7 @@ from lxml import etree
 
 nox.options.envdir = ".cache"
 nox.options.default_venv_backend = "none"
-nox.options.sessions = ["tests", "coverage", "security", "linter", "syntax", "types", "styles"]
+nox.options.sessions = ["tests", "coverage", "security", "safety", "linter", "syntax", "types", "styles"]
 
 cache_path = pathlib.Path(nox.options.envdir)
 cache_path.mkdir(exist_ok=True)
@@ -94,7 +94,7 @@ def coverage(session):
 
 @nox.session
 def security(session):
-    """Package Security Report (badges)"""
+    """Package Security Report (badge)"""
     logs = reports_path / "security.log"
     report = reports_path / "security.json"
     with logs.open("w") as handler:
@@ -111,6 +111,15 @@ def security(session):
             badge.unlink(missing_ok=True)
             session.run("anybadge", f"--value={value:}", f"--file={badge:}", f"--label={label:}",
                         "1=green", "2=red")
+
+
+@nox.session
+def safety(session):
+    """Package Safety Report (badge)"""
+    logs = reports_path / "security.log"
+    report = reports_path / "safety.json"
+    with logs.open("w") as handler:
+        session.run("safety", "--full-report", "--json", stdout=handler)
 
 
 @nox.session
