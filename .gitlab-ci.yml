@@ -1,4 +1,4 @@
-image: gitlab.sc.ulb.ac.be/smartcampus/dependency_proxy/containers/jlandercy/python-qc:3.8
+image: jlandercy/python-qc:3.8
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -7,6 +7,8 @@ cache:
   key: "Cache_${CI_PROJECT_ID}"
   paths:
     - .cache/pip
+  tags:
+    - docker
 
 default:
   before_script:
@@ -21,8 +23,8 @@ stages:
 
 package:
   stage: build
-  tags:
-    - build
+  #tags:
+  #  - build
   script:
     - nox --session package install
   artifacts:
@@ -32,8 +34,8 @@ package:
 
 quality:
   stage: tests
-  tags:
-    - tests
+  #tags:
+  #  - tests
   script:
     - nox
   artifacts:
@@ -47,8 +49,8 @@ quality:
 
 notebooks:
   stage: tests
-  tags:
-    - tests
+  #tags:
+  #  - tests
   needs:
     - package
   allow_failure: true
@@ -63,8 +65,8 @@ notebooks:
 
 documentation:
   stage: docs
-  tags:
-    - docs
+  #tags:
+  #  - docs
   needs:
     - quality
     - notebooks

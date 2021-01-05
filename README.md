@@ -6,7 +6,7 @@ with the following quality services already included:
  - [`setuptools`][100] flow for packaging;
  - [`unittest`][101] test suite sub-package suited for Test Driven Development;
  - [`coverage`][102] for test suite;
- - [`bandit`][111] for security tests;
+ - [`bandit`][111] and [`safety`][114] for security tests;
  - [`pylint`][103] and [`flake8`][112] for syntax checks;
  - [`mypy`][104] for type hints checks and errors;
  - [`black`][105] and [`isort`][106] for code formatting;
@@ -106,7 +106,7 @@ This package uses [`bandit`][101] for security checks.
 To check package python security know vulnerabilities, issue:
 
 ```bash
-nox --session security
+nox --session security safety
 ```
 
 ### Check syntax
@@ -183,6 +183,7 @@ contents (see [`noxfile.py`][210] for details).
 [111]: https://github.com/PyCQA/bandit
 [112]: https://github.com/PyCQA/flake8
 [113]: https://github.com/initios/flake8-junit-report
+[114]: https://github.com/pyupio/safety
 
 [200]: ./requirements.txt
 [201]: requirements_ci.txt
