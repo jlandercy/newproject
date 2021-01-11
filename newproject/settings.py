@@ -1,5 +1,20 @@
 """
-Settings module
+Settings module manages all package settings (system and user).
+User can adapt the default package settings using the `settings.json` file
+stored in user home directory **~/newproject**.
+
+If the settings file is missing, a fresh copy of default settings file is created
+in this directory before the package loads settings.
+
+Update of the settings file is not taken into account until package is restarted.
+
+Settings also hold package logger as well and are available in Python as follow:
+
+.. code-block:: python
+
+   from newproject.settings import settings
+   settings.logger("Settings: %s", settings.__dict__)
+
 """
 
 import json
@@ -28,6 +43,13 @@ with (settings.resources / "logging.json").open("r") as fh:
     data["loggers"][settings.name] = data["loggers"]["default"]
     logging.config.dictConfig(data)
 
+# Settings file:
+filename = 'settings.json'
+settings.file = settings.user / filename
+if not settings.file.exists():
+    settings.file.write_bytes((settings.resources / filename).read_bytes())
+settings.settings = json.loads(settings.file.read_bytes())
+
 # Application Settings:
 settings.database = os.environ.get("DATABASE", "sqlite://")
 settings.secretkey = os.environ.get("SECRETKEY", os.urandom(64))
@@ -36,9 +58,9 @@ settings.uuid4 = uuid.uuid4()
 
 def main():
     """
-    Module entrypoint
+    Settings entrypoint
     """
-    settings.logger.info(settings.__dict__)
+    settings.logger.info("Settings: %s", settings.__dict__)
     sys.exit(0)
 
 

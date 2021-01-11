@@ -33,6 +33,9 @@ The complete package references decompose as follow:
 .. toctree::
    :maxdepth: 1
 
+   Installation <./pages/installation.rst>
+   Service <./pages/service.rst>
+   Settings <./pages/settings.rst>
    Interfaces <./pages/interfaces.rst>
    Exceptions <./pages/errors.rst>
 

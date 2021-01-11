@@ -27,7 +27,7 @@ copyright = '2020, Jean Landercy'
 author = 'Jean Landercy'
 
 # The full version, including alpha/beta/rc tags
-release = str(newproject.__version__)
+release = newproject.__version__
 
 
 # -- General to_dict ---------------------------------------------------

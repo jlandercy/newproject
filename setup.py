@@ -16,7 +16,7 @@ with (_path / 'requirements.txt').open() as fh:
 
 setup(
     name=_package,
-    version=str(newproject.__version__),
+    version=newproject.__version__,
     url="https://github.com/jlandercy/{package:}".format(package=_package),
     license="BSD 3-Clause License",
     author="Jean Landercy",
