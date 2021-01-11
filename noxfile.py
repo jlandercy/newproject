@@ -222,7 +222,7 @@ def notebooks(session):
         )
     with report.open() as handler:
         session.log(handler.read())
-    pattern = re.compile(r"[NbConvertApp] Writing (?P<bytes>[\d]+) bytes to ")
+    pattern = re.compile(r"Writing (?P<bytes>[\d]+) bytes to")
     count = len(pattern.findall(report.read_text()))
     badge = reports_path / 'notebooks.svg'
     badge.unlink(missing_ok=True)

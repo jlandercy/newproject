@@ -44,7 +44,7 @@ with (settings.resources / "logging.json").open("r") as fh:
     logging.config.dictConfig(data)
 
 # Settings file:
-filename = 'settings.json'
+filename = "settings.json"
 settings.file = settings.user / filename
 if not settings.file.exists():
     settings.file.write_bytes((settings.resources / filename).read_bytes())
