@@ -8,7 +8,7 @@ import datetime
 import unittest
 
 from newproject.interfaces.examples import SimpleCase, SimpleCaseWithSerializer
-from tests.test_interfaces import TestGenericInterfaceImplementation
+from newproject.tests.test_interfaces import TestGenericInterfaceImplementation
 
 
 class TestSimpleCase(TestGenericInterfaceImplementation, unittest.TestCase):

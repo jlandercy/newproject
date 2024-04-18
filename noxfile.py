@@ -1,4 +1,5 @@
 import json
+import os
 import pathlib
 import re
 
@@ -18,6 +19,16 @@ package_path = pathlib.Path(__file__).parent
 package_name = package_path.parts[-1]
 reports_path = pathlib.Path(nox.options.envdir) / 'reports'
 reports_path.mkdir(exist_ok=True)
+
+
+def file_sub(file, pattern, replacement):
+    """Clean file with regular expression"""
+    regex = re.compile(pattern)
+    with open(file, "r") as handler:
+        original = handler.read()
+    substituted = regex.sub(replacement, original)
+    with open(file, "w") as handler:
+        handler.write(substituted)
 
 
 # Sessions:
@@ -45,12 +56,78 @@ def package(session):
 @nox.session
 def install(session):
     """Package Installer"""
-    wheels = [str(file) for file in pathlib.Path("./dist").glob("*.whl")]
+    wheels = [str(file) for file in pathlib.Path("dist/").glob("*.whl")]
     if not wheels:
         session.error("No wheel found, first package then install")
     report = reports_path / "install.log"
     with report.open("w") as handler:
-        session.run("python", "-m", "pip", "install", *wheels, stdout=handler)
+        session.run("python", "-m", "pip", "install", "--user", "--upgrade", *wheels, stdout=handler)
+
+
+@nox.session
+def build(session):
+    """Package builder"""
+    file = "requirements.txt"
+    report = reports_path / file
+    with report.open("w") as handler:
+        session.run("pip-compile", "pyproject.toml", "--output-file", file, stdout=handler)
+
+    # Clean requirements:
+    file_sub(file, "==", ">=")
+
+    report = reports_path / "build.log"
+    with report.open("w") as handler:
+        session.run("python", "-m", "build", stdout=handler)
+
+
+@nox.session
+def build_dev(session):
+    """Package builder (dev)"""
+
+    file = "requirements_ci.txt"
+    report = reports_path / file
+    with report.open("w") as handler:
+        session.run("pip-compile", "--extra", "dev", "pyproject.toml", "--output-file", file, stdout=handler)
+
+    # Clean requirements:
+    file_sub(file, "==", ">=")
+    file_sub(file, "pywin32>=", "#pywin32>=")
+
+    report = reports_path / "build.log"
+    with report.open("w") as handler:
+        session.run("python", "-m", "build", stdout=handler)
+
+
+@nox.session
+def version(session):
+    """Version bumper"""
+
+    report = reports_path / "version.log"
+    with report.open("w") as handler:
+        session.run("bumpver", "update", "--patch", "--dry", stdout=handler)
+
+
+@nox.session
+def publish(session):
+    """Publish package"""
+
+    report = reports_path / "publish.log"
+    with report.open("w") as handler:
+        # twine upload --repository-url https://upload.pypi.org/legacy/
+        #              --username $TWINE_USERNAME --password $TWINE_PASSWORD dist/*
+        password = os.getenv("TWINE_PASSWORD")
+        if password is None:
+            session.run("twine", "upload", "-r", "pypi", "dist/*", stdout=handler)
+        else:
+            session.run(
+                "twine", "upload",
+                "--repository-url", "https://upload.pypi.org/legacy/",
+                "--user", os.getenv("TWINE_USERNAME", "jlandercy"),
+                "--password", password,
+                "dist/*",
+                stdout=handler,
+                success_codes=[0, 1, 2],
+            )
 
 
 @nox.session
@@ -67,7 +144,7 @@ def tests(session):
     report = reports_path / "tests.log"
     with report.open("w") as handler:
         session.run("python", "-m", "xmlrunner", "--output-file", str(reports_path / "tests.xml"),
-                    "discover", "-v", "tests", stdout=handler)
+                    "discover", "-v", "newproject.tests", stdout=handler)
     pattern = re.compile(r"Ran (?P<count>[\d]+) tests in (?P<elapsed>[.\d]+)s")
     count, elapsed = pattern.findall(report.read_text())[0]
     badge = reports_path / 'tests.svg'
@@ -81,7 +158,7 @@ def coverage(session):
     env = {"COVERAGE_FILE": str(reports_path / "coverage.dat")}
     report = reports_path / "coverage.xml"
     session.run("python", "-m", "coverage", "run", "-m", "unittest",
-                "discover", "-v", "tests", env=env)
+                "discover", "-v", "newproject.tests", env=env)
     session.run("python", "-m", "coverage", "report", "--omit=venv/**/*", env=env)
     session.run("python", "-m", "coverage", "xml", "-o", f"{report:}", env=env)
     with report.open() as handler:
@@ -209,14 +286,15 @@ def notebooks(session):
     """Package Notebooks (badge)"""
     report = reports_path / "notebooks.log"
     with report.open("w") as handler:
-        session.run("python", "-m", "ipykernel", "install", "--name=venv", stderr=handler)
+        #session.run("python", "-m", "ipykernel", "install", "--name=venv", stderr=handler)
         session.run(
             "python", "-m",
-            "jupyter", "nbconvert", "--debug",
-            "--ExecutePreprocessor.timeout=600",
-            "--ExecutePreprocessor.kernel_name=venv",
-            "--inplace", "--clear-output", "--to", "notebook",
-            "--execute", "./docs/source/notebooks/*.ipynb",
+            "jupyter", "nbconvert",  # "--debug",
+            "--ExecutePreprocessor.timeout=1200",
+            #"--ExecutePreprocessor.kernel_name=venv",
+            "--InlineBackend.rc={'figure.dpi': 72, 'savefig.dpi': 120}",
+            "--inplace", "--clear-output", "--allow-errors", "--to", "notebook",
+            "--execute", "./docs/source/notebooks/**/*.ipynb",
             stderr=handler,
             success_codes=[0, 1]
         )
@@ -235,8 +313,10 @@ def docs(session):
     """Package Documentation (badge)"""
     report = reports_path / "docs.log"
     with report.open("w") as handler:
-        session.run("sphinx-build", "-b", "html", f"docs/source", str(cache_path / "docs"),
-                    stdout=handler)
+        session.run(
+            "sphinx-build", "-b", "html", f"docs/source", str(cache_path / "docs"),
+            stdout=handler,
+        )
     pattern = re.compile(r"build (?P<status>[\w]+).")
     status = pattern.findall(report.read_text())[0]
     badge = reports_path / 'docs.svg'
