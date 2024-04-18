@@ -165,7 +165,7 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/jlandercy/scifit"
+Homepage = "https://github.com/jlandercy/newproject"
 
 [tool.bumpver]
 current_version = "0.1.0"
@@ -184,7 +184,7 @@ push = true
 "pyproject.toml" = [
     'version = "{version}"',
 ]
-"scifit/__init__.py" = [
+"newproject/__init__.py" = [
     '__version__ = "{version}"',
 ]
 "docs/source/conf.py" = [

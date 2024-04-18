@@ -8,4 +8,4 @@ from newproject.interfaces import *
 
 warnings.simplefilter("ignore")
 
-__version__ = "2021.1.11b4"
+__version__ = "0.1.0"
